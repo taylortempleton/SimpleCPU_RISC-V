@@ -17,7 +17,6 @@
 
 #include "riscv_instr_defines.h"
 #include "riscv_reg_defines.h"
-#include "encoding.out.h"
 
 // Define to specify the number of instructions in the end code
 #define NUM_END_SEQ_INSTR 2
@@ -36,10 +35,10 @@
 // Defines the size of TEXT section
 #define MEM_TEXT_SIZE  0x00001FFF
 
-extern int PC[IMEM_SIZE];      /* Program counter arr - index using PC */
-extern int instr[IMEM_SIZE];      /* Stores hex value of the instruction  */
-extern int ls_addr[IMEM_SIZE];      /* Stores the addresses used by load/store instr */
-extern int br_addr[IMEM_SIZE];      /* Stores the addresses used by branch instrs    */
+int PC     [IMEM_SIZE];      /* Program counter arr - index using PC */
+int instr  [IMEM_SIZE];      /* Stores hex value of the instruction  */
+int ls_addr[IMEM_SIZE];      /* Stores the addresses used by load/store instr */
+int br_addr[IMEM_SIZE];      /* Stores the addresses used by branch instrs    */
 
 typedef struct CPU_State_Struct {
   uint32_t PC;          /* Program counter */
@@ -48,9 +47,9 @@ typedef struct CPU_State_Struct {
 
 /* Data Structure for Latch */
 extern CPU_State CURRENT_STATE;
-extern int instr_gen;          /* Keeps a count of the number of   */
+int instr_gen;          /* Keeps a count of the number of   */
                         /* instructions generated           */
-extern int err_count;          /* Keeps a count of the number of   */
+int err_count;          /* Keeps a count of the number of   */
                         /* errors generated, if any         */
 
 #ifdef GEN_USER_TEST

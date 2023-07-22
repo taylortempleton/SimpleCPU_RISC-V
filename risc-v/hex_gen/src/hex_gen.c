@@ -57,18 +57,20 @@ int check_brn_addr (int rs, int imm) {
 /* is a valid jump address. If the address is valid, the function    */
 /* returns 1.                                                        */
 int check_j_addr (int imm, int funct, int rs1) {
-    int shift_val = shift_const(11); // sign extention if needed, 1s left site of 32 bit shift_val: ffe00000, or 1111111111100000000000000000
-    int sign = (imm & 0x100000)>>20;  // Bitwise addition of random 20-bit imm and 20-bit 10000.. to grab 1-bit sign indicator
-    if (funct == MATCH_JALR) {
-      shift_val = shift_const(20); // = 0xFFFFF000 -> 11111111111111111111000000000000
-      sign = (imm & 0x800)>>11; // Original
+    int shift_val = shift_const(11);
+    int sign = (imm & 0x100000)>>20;
+    if (funct == JALR) {
+      shift_val = shift_const(20);
+      sign = (imm & 0x800)>>11;
     }
     imm = (sign) ? (imm | shift_val) : imm;
-    unsigned int addr = CURRENT_STATE.PC + ((imm>>1)<<1); // immediate shift left 1 bit: risc spec for j intermmediates indicates LSB always 0 to ensure no odd addr
-    if (funct == MATCH_JALR) {
-      CURRENT_STATE.REGS[rs1] = MEM_TEXT_START;  // Setting register to MEM_TEXT_START to avoid REGS[rs1] = 0, leading to jump outside memory space
-      addr = CURRENT_STATE.REGS[rs1]+ ((imm>>1)<<1); // Original
+    unsigned int addr = CURRENT_STATE.PC + (imm<<1);
+    if (funct == JALR) {
+      printf("RS[%d]: %x\tIMM: %x\n", rs1, CURRENT_STATE.REGS[rs1], imm<<1);
+      addr = CURRENT_STATE.REGS[rs1]+ imm<<1;
     }
+    printf("ADDR is %x\t\n", addr);
+    //printf("PC: %x\n", CURRENT_STATE.PC); 
     // Reducing the range of jump address to avoid
     // PC from overflowing the memory region
     if (((unsigned)addr > MEM_TEXT_START) &&
@@ -99,13 +101,12 @@ void gen_r_instr (int vopt, ...) {
     int     opcode, funct7, funct3;
     int     rs1, rs2, rd;
     int     hex_instr;
-    int     funct;
+    int     funct, funct_idx;
     int     i;
     va_list valist;
 
-    int funct_idx   = rand()%10;
-    opcode = 0;
-
+    opcode      = 0x33;
+    funct_idx   = 0;
     if (vopt) {
         va_start (valist, vopt);
         funct3  = va_arg (valist, int);
@@ -115,6 +116,7 @@ void gen_r_instr (int vopt, ...) {
         funct7  = va_arg (valist, int);
         va_end (valist);
         funct   = ((funct7>>6 & 0x1) << 3) | funct3;
+
         for (i = 0; i < 10; i++) {
             if (funct_val_r_type[i] == funct) {
                 funct_idx = i;
@@ -123,15 +125,17 @@ void gen_r_instr (int vopt, ...) {
         }
     }
     else {
-        opcode      = (funct_val_r_type[funct_idx]) & 0x3F;
-        funct3      = (funct_val_r_type [funct_idx] & 0x7000) >> 12;
-        funct7      = (((funct_val_r_type [funct_idx]) & 0xFE000000) >> 25);       
+        funct_idx   = rand()%10;
+        funct3      = funct_val_r_type [funct_idx] & 0x7;
+        funct7      = 0x0 | (((funct_val_r_type [funct_idx] >> 3) & 0x1) << 5);
         rs1         = rand ()%32;
         rs2         = rand ()%32;
         rd          = rand ()%32;
     }
 
-    hex_instr = (funct7 << 25) + (rs2 << 20) + (rs1 << 15) + (funct3 << 12) + (rd << 7) + opcode;
+    hex_instr = (funct7 << 25) + (rs2 << 20) +
+                (rs1 << 15) + (funct3 << 12) +
+                (rd << 7) + opcode;
 
     printf ("[%d] R Type instr generated - 0x%.7x\t\n", instr_gen, hex_instr);
     load_instr_opcode ((uint32_t) hex_instr);
@@ -200,29 +204,21 @@ void gen_i_instr (int vopt, ...) {
                 break;
             }
         }
-    } 
-    else {
-        //funct_idx   = rand() % 2; // Randomly select one of supported I type instructions
-        funct_idx   = 6;
-
-        //Format Opcode
-        opcode      = ((opcode_val_i_type [funct_idx]) & 0x7f);
-        
-        //Format funct3, isolate 3 bits containing funct3
-        funct3      = ((opcode_val_i_type [funct_idx]) & 0x7000) >> 12;
-        
-        // TODO: Will need funct7 field when support added for slli, srli, srai
-        //funct7      = ????
-
-        rd          = rand() % 32; // Randomly select 5-bit destination
-    RS1_I:
-        rs1         = rand() % 32; // Randomly select 5-bit source
-    IMM_I:    
-        imm         = rand() % 0xFFF;   // Randomly select 12-bit immediate (0 to 4096)
-        
     }
-
-    if (strcmp(opcode_str_i_type[funct_idx], "JALR") !=0) {
+    else {
+        funct_idx   = rand()%8;
+        opcode      = (((opcode_val_i_type [funct_idx] >> 4) & 0x1) << 4) | 0x3;
+        funct3      = ((opcode_val_i_type [funct_idx]) & 0x7);
+        rd          = rand() % 32;
+    RS1_I:
+        rs1         = rand() % 32;
+    IMM_I:    
+        imm         = rand() % 0xFFF;   /* 12-bit signal */
+    }
+    funct   = ((opcode>>4 & 0x1) << 4) | funct3;
+    if (((funct == LW) || (funct == LB))  ||
+        ((funct == LH) || (funct == LBU)) ||
+        ((funct == LHU))) {
         unsigned int addr = check_ls_addr (rs1, imm);
         if (addr == 2) {
             // Report an error if the above was called with vopt set
@@ -249,12 +245,14 @@ void gen_i_instr (int vopt, ...) {
             ls_addr[instr_gen+1] = addr;
         }
     }
-        else if (strcmp(opcode_str_i_type[funct_idx], "JALR") ==0){
-      if (check_j_addr (imm, MATCH_JALR, rs1) == 0) {
+    else if ((funct == JALR)) {
+      if (check_j_addr (imm, JALR, rs1) == 0) {
         goto RS1_I;
       }
     }
-    hex_instr = (imm << 20) + (rs1 << 15) + (funct3 << 12) + (rd << 7) + opcode;
+
+    hex_instr = (imm << 20) + (rs1 << 15) + (funct3 << 12) +
+                (rd << 7)   + opcode;
 
     printf ("[%d] I Type instr generated - 0x%-8x\n", instr_gen, hex_instr);
     load_instr_opcode ((uint32_t) hex_instr);
@@ -262,7 +260,7 @@ void gen_i_instr (int vopt, ...) {
     if (instr_gen == 0)
         update_cpu (MEM_TEXT_START, hex_instr);
     else
-        update_cpu (prev_pc, hex_instr);       
+        update_cpu (prev_pc, hex_instr);
     print_assembled_i_instr (funct_idx, rs1, rd, imm);
     instr_gen++;
 }
@@ -316,9 +314,9 @@ void gen_s_instr (int vopt, ...) {
         }
     }
     else {
-        funct_idx = rand()%1;
-        opcode      = ((opcode_val_s_type [funct_idx]) & 0x7f);
-        funct3      = ((opcode_val_s_type [funct_idx]) & 0x7000) >> 12;
+        funct_idx   = rand()%1;
+        opcode      = 0x23;
+        funct3      = opcode_val_s_type [funct_idx];
         rs1         = rand() % 32;
         rs2         = rand() % 32;
         imm         = rand() % 0xFFF;   /* 12-bit signal */
@@ -404,9 +402,7 @@ void gen_b_instr (int vopt, ...) {
     unsigned int addr;
     va_list valist;
 
-    opcode  = 0;
-    funct_idx   = 0;
-
+    funct_idx  = 0;
     if (vopt) {
         va_start (valist, vopt);
         funct3  = va_arg (valist, int);
@@ -423,10 +419,9 @@ void gen_b_instr (int vopt, ...) {
         }
     }
     else {
-        //funct_idx   = rand()%6;
-        funct_idx = 0;
-        opcode      = ((opcode_val_b_type [funct_idx]) & 0x7f);
-        funct3      = ((opcode_val_b_type [funct_idx]) & 0x7000) >> 12;
+        funct_idx   = rand()%6;
+        opcode      = 0x63;
+        funct3      = opcode_val_b_type [funct_idx];
         rs1         = rand() % 32;
         rs2         = rand() % 32;
     IMM_B:    
@@ -521,12 +516,12 @@ void gen_u_instr (int vopt, ...) {
     int     rd;
     int     hex_instr;
     int     imm;
-    int     opcode_idx = 0;
+    int     opcode_idx;
     int     opcode;
     int     i;
     va_list valist;
 
-    opcode_idx  = 0; // Set default value of opcode index, which is selected of opcodes supported
+    opcode_idx  = 0;
     if (vopt) {
         va_start (valist, vopt);
         opcode  = va_arg (valist, int);
@@ -542,13 +537,14 @@ void gen_u_instr (int vopt, ...) {
         }
     }
     else {
-        opcode_idx  = rand()%2; // Random value for opcode, limited to # of supported codes
-        opcode      = ((opcode_val_u_type [opcode_idx]) & 0x7f);
-        rd          = rand() % 32; // randomly set destination register value
-        imm         = rand() % 0xFFFFF;   /* 20-bit signal */  // randomly set imm, within 20-bit limit
+        opcode_idx  = rand()%2;
+        opcode      = opcode_val_u_type [opcode_idx];
+        rd          = rand() % 32;
+        imm         = rand() % 0xFFFFF;   /* 20-bit signal */
     }
 
-    hex_instr = (imm << 12) + (rd << 7) + opcode; 
+    hex_instr = (imm << 12) + (rd << 7) + opcode;
+
     printf ("[%d] U Type instr generated - 0x%-8x\n", instr_gen, hex_instr);
     load_instr_opcode ((uint32_t) hex_instr);
     run (1);
@@ -578,10 +574,9 @@ void gen_j_instr (int vopt, ...) {
     int     hex_instr;
     va_list valist;
     int     i;
+    int     opcode_idx = rand()%1;
 
-    int     opcode_idx = rand()%1; // Randomly select one of supported I type instructions
-
-
+    opcode  = 0x6F;
     if (vopt) {
         va_start (valist, vopt);
         opcode  = va_arg (valist, int);
@@ -597,12 +592,10 @@ void gen_j_instr (int vopt, ...) {
         }
     }
     else {
-        opcode      = ((opcode_val_j_type [opcode_idx]));
-        rd = rand() % 32; // randomly set destination register value
+        rd = rand() % 32;
     IMM_J:
-        // Original -- Needlessly larger than memory available, cycles too much
-         //imm = (rand() % 0x100000) + 1; // Pick number < 20bits.
-        imm = (rand() % ((MEM_TEXT_START + MEM_TEXT_SIZE - 0xFF)-CURRENT_STATE.PC)) + 1; // Hard code max memory value
+        imm = (rand() % 0x100000) + 1;
+        imm = imm << 2;
     }
 
     if ((check_j_addr(imm, 0, 0) == 0)) {
@@ -646,8 +639,8 @@ void make_room () {
     // There should be space for at least
     // two instructions. Check for PC valid
     //  if valid -> no space else it is okay
-    if (((PC[pc] == 0) && (PC[pc_q]==0)) && !(pc == (MEM_TEXT_START+MEM_TEXT_SIZE-0xFF))
-        ) {
+    if (((PC[pc] == 0) && (PC[pc_q]==0)) &&
+        !(pc == (MEM_TEXT_START+MEM_TEXT_SIZE-0xFF))) {
         return;
     }
     // No space available. Insert Jump instr
@@ -806,9 +799,9 @@ int main (int argc, char* argv[]) {
     // Begin generating instructions
     gen_instr_hex (num_r, num_i, num_s, num_b, num_u, num_j);
 //#ifdef GEN_USER_TEST
-  //  gen_user_test ();
+//    gen_user_test ();
 //#endif
-   // gen_end_seq ();
+    //gen_end_seq ();
     pc_hex_val    = fopen ("pc_values_hex", "w");
     instr_hex_val = fopen ("instr_hex", "w");
     print_to_file (pc_hex_val, instr_hex_val);
