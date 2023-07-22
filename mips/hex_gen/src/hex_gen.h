@@ -31,7 +31,7 @@ void print_assembled_j_instr (int, int);
 void gen_end_seq ();
 void print_to_file (FILE*, FILE*);
 
-extern int prev_pc;
+int prev_pc;
 FILE* pc_hex_val;
 FILE* instr_hex_val;
 

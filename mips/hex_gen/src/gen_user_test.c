@@ -1,4 +1,8 @@
 #include "gen_user_test.h"
+#include <stdint.h>
+
+#include "mips_instr_defines.h"
+#include "mips_reg_defines.h"
 
 void gen_user_test () {
     uint32_t pc;

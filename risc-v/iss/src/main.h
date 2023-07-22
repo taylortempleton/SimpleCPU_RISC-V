@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include "riscv_instr_defines.h"
+#include "encoding.out.h"
 
 #define FALSE 0
 #define TRUE  1
@@ -33,7 +34,7 @@ extern CPU_State CURRENT_STATE, NEXT_STATE;
 extern int RUN_BIT;     /* Run bit                  */
 extern int prev_pc;     /* Previous program counter */
 extern int instr_count; /* Instruction count        */
-uint32_t   instr_opcode;
+
 extern int my_count;
 
 uint32_t mem_read_32(uint32_t address);
