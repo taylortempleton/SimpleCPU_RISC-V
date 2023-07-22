@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include "main.h"
 
+uint32_t   instr_opcode;
+
+
 int decode_instr_type (uint32_t instr_opcode) {
     int type;
     if ((instr_opcode >> 26) == 0) { //R type

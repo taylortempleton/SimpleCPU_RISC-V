@@ -6,7 +6,10 @@ all: src/*.c
 	gcc $(CFLAGS) -g -O2 $^ -o hex_gen -L. lib/libhex.so -D GEN_USER_TEST
 
 hex: src/*.c
-	gcc $(CFLAGS) -g -O2 $^ -o hex_gen -L. lib/libhex.so
+	gcc $(CFLAGS) -g -O2 $^ -o hex_gen libhex.so -Wl,--verbose
+
+hex_taylor:src/*.c
+	gcc $(CFLAGS) -g -O2 $^ -o hex_gen -L/lib/libhex.so
 
 hex_preload: src/*.c
 	gcc $(CFLAGS) -g -O2 $^ -o hex_gen -L. lib/libhex_preload.so

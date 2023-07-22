@@ -7,6 +7,8 @@
 /***************************************************************/
 
 #include "hex_gen.h"
+#include "hex_gen_shared.h"
+
 
 void update_cpu (int pc, int hex_instr) {
     PC[pc]           = 1;

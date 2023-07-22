@@ -8,6 +8,14 @@
 
 #include "hex_gen_shared.h"
 
+int PC     [IMEM_SIZE];     /* Program counter arr - index using PC */
+int instr  [IMEM_SIZE];      /* Stores hex value of the instruction  */
+int ls_addr[IMEM_SIZE];      /* Stores the addresses used by load/store instr */
+int br_addr[IMEM_SIZE];      /* Stores the addresses used by branch instrs    */
+
+int err_count;
+int instr_gen; 
+
 /* Function to initialise Hex-Gen Tool  */
 /* All the global variables should be   */
 /* set to their initial value here      */

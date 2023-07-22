@@ -36,11 +36,20 @@ FILE* pc_hex_val;
 FILE* instr_hex_val;
 
 const int funct_val_r_type[10] = {
-    SLL,     SRL,       SRA,
-    ADD,     SUB,       AND,
-    OR,      XOR,       SLT,
-    SLTU
+    MATCH_SLL,     MATCH_SRL,       MATCH_SRA,
+    MATCH_ADD,     MATCH_SUB,       MATCH_AND,
+    MATCH_OR,      MATCH_XOR,       MATCH_SLT,
+    MATCH_SLTU
 };
+/*
+const int mask_val_r_type[10] = {
+    MASK_SLL,     MASK_SRL,       MASK_SRA,
+    MASK_ADD,     MASK_SUB,       MASK_AND,
+    MASK_OR,      MASK_XOR,       MASK_SLT,
+    MASK_SLTU
+};
+*/
+
 const char* funct_str_r_type[10] = {
     "SLL",     "SRL",       "SRA",
     "ADD",     "SUB",       "AND",
@@ -48,10 +57,16 @@ const char* funct_str_r_type[10] = {
     "SLTU"
 };
 const int opcode_val_i_type[8] = {
-    ADDI,       SLTI,       SLTIU,
-    ANDI,       ORI,        XORI,
-    JALR,       /*LB,         LH,*/
-    LW         /*LBU,        LHU*/
+    MATCH_ADDI,       MATCH_SLTI,       MATCH_SLTIU,
+    MATCH_ANDI,       MATCH_ORI,        MATCH_XORI,
+    MATCH_JALR,       /*LB,         LH,*/
+    MATCH_LW         /*LBU,        LHU*/
+};
+const int mask_val_i_type[8] = {
+    MASK_ADDI,       MASK_SLTI,       MASK_SLTIU,
+    MASK_ANDI,       MASK_ORI,        MASK_XORI,
+    MASK_JALR,       /*LB,         LH,*/
+    MASK_LW         /*LBU,        LHU*/
 };
 const char* opcode_str_i_type[8] = {
     "ADDI",       "SLTI",       "SLTIU",
@@ -60,27 +75,27 @@ const char* opcode_str_i_type[8] = {
     "LW"         /*"LBU",        "LHU"*/
 };
 const int opcode_val_s_type[1] = {
-    /*SB,         SH,*/         SW
+    /*SB,         SH,*/         MATCH_SW
 };
 const char* opcode_str_s_type[1] = {
     /*"SB",         "SH",*/         "SW"
 };
 const int opcode_val_b_type[6] = {
-    BEQ,        BNE,        BLT,
-    BLTU,       BGE,        BGEU
+    MATCH_BEQ,        MATCH_BNE,        MATCH_BLT,
+    MATCH_BLTU,       MATCH_BGE,         MATCH_BGEU
 };
 const char* opcode_str_b_type[6] = {
     "BEQ",        "BNE",        "BLT",
     "BLTU",       "BGE",        "BGEU"
 };
 const int opcode_val_u_type[2] = {
-    LUI,        AUIPC
+    MATCH_LUI ,        MATCH_AUIPC
 };
 const char* opcode_str_u_type[2] = {
-    "LUI",        "AUIPC"
+    "LUI" ,        "AUIPC"
 };
 const int opcode_val_j_type[1] = {
-    JAL
+    MATCH_JAL
 };
 const char* opcode_str_j_type[1] = {
     "JAL"

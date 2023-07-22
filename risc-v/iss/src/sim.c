@@ -1,5 +1,8 @@
 #include <stdio.h>
+#include <stdint.h>
 #include "main.h"
+
+uint32_t   instr_opcode;
 
 int decode_instr_type (uint32_t instr_opcode) {
     int type;
@@ -8,7 +11,8 @@ int decode_instr_type (uint32_t instr_opcode) {
         return type;
     }
     else if (((instr_opcode & 0x7F) == 0x13) ||
-             ((instr_opcode & 0x7F) == 0x03)) { // I-Type
+             ((instr_opcode & 0x7F) == 0x03) ||
+             ((instr_opcode & 0x7F) == 0x67)) {   // I-Type
         type = I_TYPE;
         return type;
     }
@@ -20,8 +24,8 @@ int decode_instr_type (uint32_t instr_opcode) {
         type = B_TYPE;
         return type;
     }
-    else if (((instr_opcode & 0x7F) == AUIPC) || 
-             ((instr_opcode & 0x7F) == LUI)) { // U-Type
+    else if (((instr_opcode & 0x7F) == MATCH_AUIPC) || 
+             ((instr_opcode & 0x7F) == MATCH_LUI)) { // U-Type
         type = U_TYPE;
         return type;
     }
@@ -210,18 +214,21 @@ void decode_r (uint32_t instr_opcode) {
     execute_r (rs1, rs2, rd, funct7, funct3);
 }
 
-void execute_i (unsigned int funct3, int opcode, uint32_t rs1, uint32_t rd, int imm) {
+void execute_i (unsigned int funct3, int opcode, uint32_t rs1, uint32_t rd, int imm, int opcodefunct_mask) {
     int sign, mem_content;
     int shift_val;
     uint32_t address;
-    unsigned int funct = ((opcode>>4 & 0x1) << 4) | funct3;
+    // Original
+    //unsigned int funct = ((opcode>>4 & 0x1) << 4) | funct3;
+    // Experimental
+    //unsigned int funct = ((opcode>>4 & 0x1) << 4) | funct3;
     //printf ("I-type instruction\tOpcode is :0x%x\n", opcode);
     // TODO: Add SLLI, SRLI, SRAI instructions
     shift_val = shift_const(20);
     sign = (imm & 0x800)>>11;
     imm = (sign) ? (imm | shift_val) : imm;
-    switch (funct) {
-        case (ADDI): //ADDI
+    switch (opcodefunct_mask) {
+        case (MATCH_ADDI): //ADDI
             printf ("[%d] PC:%.8x\tINSTR:%.8x\t ADDI X%-2d, X%-2d, 0x%-32x\n", 
                 instr_count,
                 CURRENT_STATE.PC,
@@ -238,7 +245,7 @@ void execute_i (unsigned int funct3, int opcode, uint32_t rs1, uint32_t rd, int 
             NEXT_STATE.PC = CURRENT_STATE.PC + 4;
             
         break;
-        case (SLTI): //SLTI
+        case (MATCH_SLTI): //SLTI
             printf ("[%d] PC:%.8x\tINSTR:%.8x\t SLTI X%-2d, X%-2d, 0x%-32x\n", 
                 instr_count,
                 CURRENT_STATE.PC,
@@ -254,7 +261,7 @@ void execute_i (unsigned int funct3, int opcode, uint32_t rs1, uint32_t rd, int 
             NEXT_STATE.REGS[rd] = ((int32_t)CURRENT_STATE.REGS[rs1] < (int32_t)imm);
             NEXT_STATE.PC = CURRENT_STATE.PC + 4;
         break;
-        case (SLTIU): //SLTIU
+        case (MATCH_SLTIU): //SLTIU
             printf ("[%d] PC:%.8x\tINSTR:%.8x\t SLTIU X%-2d, X%-2d, 0x%-32x\n", 
                 instr_count,
                 CURRENT_STATE.PC,
@@ -270,7 +277,7 @@ void execute_i (unsigned int funct3, int opcode, uint32_t rs1, uint32_t rd, int 
             NEXT_STATE.REGS[rd] = ((uint32_t)CURRENT_STATE.REGS[rs1] < (uint32_t)imm);
             NEXT_STATE.PC = CURRENT_STATE.PC + 4;
         break;
-        case (ANDI): //ANDI
+        case (MATCH_ANDI): //ANDI
             printf ("[%d] PC:%.8x\tINSTR:%.8x\t ANDI X%-2d, X%-2d, 0x%-32x\n", 
                 instr_count,
                 CURRENT_STATE.PC,
@@ -286,7 +293,7 @@ void execute_i (unsigned int funct3, int opcode, uint32_t rs1, uint32_t rd, int 
             NEXT_STATE.REGS[rd] = ((uint32_t)CURRENT_STATE.REGS[rs1] & (uint32_t)imm);
             NEXT_STATE.PC = CURRENT_STATE.PC + 4;
         break;
-        case (ORI): //ORI
+        case (MATCH_ORI): //ORI
             printf ("[%d] PC:%.8x\tINSTR:%.8x\t ORI X%-2d, X%-2d, 0x%-32x\n", 
                 instr_count,
                 CURRENT_STATE.PC,
@@ -302,7 +309,7 @@ void execute_i (unsigned int funct3, int opcode, uint32_t rs1, uint32_t rd, int 
             NEXT_STATE.REGS[rd] = ((uint32_t)CURRENT_STATE.REGS[rs1] | (uint32_t)imm);
             NEXT_STATE.PC = CURRENT_STATE.PC + 4;
         break;
-        case (XORI): //XORI
+        case (MATCH_XORI): //XORI
             printf ("[%d] PC:%.8x\tINSTR:%.8x\t XORI X%-2d, X%-2d, 0x%-32x\n", 
                 instr_count,
                 CURRENT_STATE.PC,
@@ -318,19 +325,19 @@ void execute_i (unsigned int funct3, int opcode, uint32_t rs1, uint32_t rd, int 
             NEXT_STATE.REGS[rd] = ((uint32_t)CURRENT_STATE.REGS[rs1] ^ (uint32_t)imm);
             NEXT_STATE.PC = CURRENT_STATE.PC + 4;
         break;
-        case (JALR): //JALR
+        case (MATCH_JALR): //JALR
             NEXT_STATE.PC = CURRENT_STATE.REGS[rs1] + imm;
             if (rd) {
-              NEXT_STATE.REGS[rd] = CURRENT_STATE.PC + 4;
+                NEXT_STATE.REGS[rd] = CURRENT_STATE.PC + 4; // Linking
             }
-            printf ("[%d] PC:%.8x\tINSTR:%.8x\t JALR %-2d\n", 
+            printf ("[%d] PC:%.8x\tINSTR:%.8x\t JALR %-2d\n",
                 instr_count,
                 CURRENT_STATE.PC,
                 instr_opcode,
                 NEXT_STATE.PC
             );
         break;
-        case (LB): //LB
+        case (MATCH_LB): //LB
             address = CURRENT_STATE.REGS[rs1] + imm;
             mem_content = mem_read_32((uint32_t)address) & 0xFF;
             shift_val = shift_const(24);
@@ -350,7 +357,7 @@ void execute_i (unsigned int funct3, int opcode, uint32_t rs1, uint32_t rd, int 
             NEXT_STATE.REGS[rd] = (sign) ? (mem_content | shift_val) : mem_content;
             NEXT_STATE.PC = CURRENT_STATE.PC + 4;
         break;
-        case (LH): //LH
+        case (MATCH_LH): //LH
             address = CURRENT_STATE.REGS[rs1] + imm;
             mem_content = mem_read_32((uint32_t)address) & 0xFFFF;
             sign = (mem_content >> 15);
@@ -369,7 +376,7 @@ void execute_i (unsigned int funct3, int opcode, uint32_t rs1, uint32_t rd, int 
             NEXT_STATE.REGS[rd] = (sign) ? (mem_content | shift_val) : mem_content;
             NEXT_STATE.PC = CURRENT_STATE.PC + 4;
         break;
-        case (LW): //LW
+        case (MATCH_LW): //LW
             address = CURRENT_STATE.REGS[rs1] + imm;
             mem_content = mem_read_32((uint32_t)address) ;
             printf ("[%d] PC:%.8x\tINSTR:%.8x\t LW X%-2d, X%-2d, 0x%-32x\n", 
@@ -387,7 +394,7 @@ void execute_i (unsigned int funct3, int opcode, uint32_t rs1, uint32_t rd, int 
             NEXT_STATE.REGS[rd] = mem_content;
             NEXT_STATE.PC = CURRENT_STATE.PC + 4;
         break;
-        case (LBU): //LBU
+        case (MATCH_LBU): //LBU
             address = CURRENT_STATE.REGS[rs1] + imm;
             mem_content = mem_read_32((uint32_t)address) & 0xFF;
             printf ("[%d] PC:%.8x\tINSTR:%.8x\t LBU X%-2d, X%-2d, 0x%-32x\n", 
@@ -405,7 +412,7 @@ void execute_i (unsigned int funct3, int opcode, uint32_t rs1, uint32_t rd, int 
             NEXT_STATE.REGS[rd] = mem_content;
             NEXT_STATE.PC = CURRENT_STATE.PC + 4;
         break;
-        case (LHU): //LHU
+        case (MATCH_LHU): //LHU
             address = CURRENT_STATE.REGS[rs1] + imm;
             mem_content = mem_read_32((uint32_t)address) & 0xFFFF;
             printf ("[%d] PC:%.8x\tINSTR:%.8x\t LHU X%-2d, X%-2d, 0x%-32x\n", 
@@ -430,13 +437,19 @@ void decode_i (uint32_t instr_opcode) {
     uint32_t rs1, rd;
     unsigned int funct3; 
     int imm, opcode;
+
+    /*opcodefunct_mask makes use of the riscv provided mask from encoding.out.h, 
+    which specifies relevant opcode/funct3/funt7 
+    bits for a given instruction type */
+    int opcodefunct_mask = instr_opcode & MASK_JALR;
+
     funct3 = (instr_opcode >> 12)   & 0x07;
     opcode = (instr_opcode      )   & 0x7F;
     rs1    = (instr_opcode >> 15)   & 0x1F;
     rd     = (instr_opcode >>  7)   & 0x1F;
     imm    = (instr_opcode >> 20)   & 0xFFF;
 
-    execute_i (funct3, opcode, rs1, rd, imm);
+    execute_i (funct3, opcode, rs1, rd, imm, opcodefunct_mask);
 }
 
 void execute_s (unsigned int funct3, uint32_t rs1, uint32_t rs2, int imm) {
@@ -656,7 +669,7 @@ void decode_b (uint32_t instr_opcode) {
 void execute_u (int opcode, uint32_t rd, int imm) {
     int u_val;
     switch (opcode) {
-        case (LUI): //LUI
+        case (MATCH_LUI): //LUI
             u_val = imm << 12;
             NEXT_STATE.REGS[rd] = rd ? u_val : 0;
             NEXT_STATE.PC = CURRENT_STATE.PC + 4;
@@ -668,7 +681,7 @@ void execute_u (int opcode, uint32_t rd, int imm) {
                 imm
             );
         break;
-        case (AUIPC): //AUIPC
+        case (MATCH_AUIPC): //AUIPC
             u_val = imm << 12;
             NEXT_STATE.REGS[rd] = rd ? CURRENT_STATE.PC + u_val : 0;
             NEXT_STATE.PC = CURRENT_STATE.PC + 4;
@@ -733,7 +746,7 @@ void process_instruction() {
     /* Execute one instruction here. You should use CURRENT_STATE and modify
      * values in NEXT_STATE. You can call mem_read_32() and mem_write_32() to
      * access memory. */
-    instr_opcode = mem_read_32(CURRENT_STATE.PC);
+    instr_opcode = mem_read_32(CURRENT_STATE.PC);   
     //printf ("Instr Read: %-8x from %-8x\n", instr_opcode, CURRENT_STATE.PC);
     int type = decode_instr_type (instr_opcode);
     if (type == R_TYPE)
