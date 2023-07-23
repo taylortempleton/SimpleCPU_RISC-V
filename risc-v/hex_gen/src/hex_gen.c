@@ -103,7 +103,7 @@ void gen_r_instr (int vopt, ...) {
     int     i;
     va_list valist;
 
-    int funct_idx   = rand()%10;
+    int instr_idx   = rand()%10;
     opcode = 0;
 
     if (vopt) {
@@ -117,15 +117,15 @@ void gen_r_instr (int vopt, ...) {
         funct   = ((funct7>>6 & 0x1) << 3) | funct3;
         for (i = 0; i < 10; i++) {
             if (funct_val_r_type[i] == funct) {
-                funct_idx = i;
+                instr_idx = i;
                 break;
             }
         }
     }
     else {
-        opcode      = (funct_val_r_type[funct_idx]) & 0x3F;
-        funct3      = (funct_val_r_type [funct_idx] & 0x7000) >> 12;
-        funct7      = (((funct_val_r_type [funct_idx]) & 0xFE000000) >> 25);       
+        opcode      = (funct_val_r_type[instr_idx]) & 0x3F;
+        funct3      = (funct_val_r_type [instr_idx] & 0x7000) >> 12;
+        funct7      = (((funct_val_r_type [instr_idx]) & 0xFE000000) >> 25);       
         rs1         = rand ()%32;
         rs2         = rand ()%32;
         rd          = rand ()%32;
@@ -140,7 +140,7 @@ void gen_r_instr (int vopt, ...) {
         update_cpu (MEM_TEXT_START, hex_instr);
     else
         update_cpu (prev_pc, hex_instr);
-    print_assembled_r_instr (funct_idx, rs1, rs2, rd);
+    print_assembled_r_instr (instr_idx, rs1, rs2, rd);
     instr_gen++;
 }
 
@@ -183,7 +183,8 @@ void gen_i_instr (int vopt, ...) {
     int     i;
     va_list valist;
 
-    funct_idx  = 0;
+    int instr_idx  = 0;
+
     if (vopt) {
         va_start (valist, vopt);
         funct3  = va_arg (valist, int);
@@ -196,24 +197,17 @@ void gen_i_instr (int vopt, ...) {
 
         for (i = 0; i < 8; i++) {
             if (opcode_val_i_type[i] == funct) {
-                funct_idx = i;
+                instr_idx = i;
                 break;
             }
         }
     } 
     else {
-        //funct_idx   = rand() % 2; // Randomly select one of supported I type instructions
-        funct_idx   = 6;
-
-        //Format Opcode
-        opcode      = ((opcode_val_i_type [funct_idx]) & 0x7f);
-        
-        //Format funct3, isolate 3 bits containing funct3
-        funct3      = ((opcode_val_i_type [funct_idx]) & 0x7000) >> 12;
-        
+        instr_idx   = rand() % 8; // Randomly select one of supported I type instructions
+        opcode      = ((opcode_val_i_type [instr_idx]) & 0x7f);
+        funct3      = ((opcode_val_i_type [instr_idx]) & 0x7000) >> 12;
         // TODO: Will need funct7 field when support added for slli, srli, srai
         //funct7      = ????
-
         rd          = rand() % 32; // Randomly select 5-bit destination
     RS1_I:
         rs1         = rand() % 32; // Randomly select 5-bit source
@@ -222,7 +216,7 @@ void gen_i_instr (int vopt, ...) {
         
     }
 
-    if (strcmp(opcode_str_i_type[funct_idx], "JALR") !=0) {
+    if (strcmp(opcode_str_i_type[instr_idx], "JALR") !=0) {
         unsigned int addr = check_ls_addr (rs1, imm);
         if (addr == 2) {
             // Report an error if the above was called with vopt set
@@ -249,7 +243,7 @@ void gen_i_instr (int vopt, ...) {
             ls_addr[instr_gen+1] = addr;
         }
     }
-        else if (strcmp(opcode_str_i_type[funct_idx], "JALR") ==0){
+        else if (strcmp(opcode_str_i_type[instr_idx], "JALR") ==0){
       if (check_j_addr (imm, MATCH_JALR, rs1) == 0) {
         goto RS1_I;
       }
@@ -263,7 +257,7 @@ void gen_i_instr (int vopt, ...) {
         update_cpu (MEM_TEXT_START, hex_instr);
     else
         update_cpu (prev_pc, hex_instr);       
-    print_assembled_i_instr (funct_idx, rs1, rd, imm);
+    print_assembled_i_instr (instr_idx, rs1, rd, imm);
     instr_gen++;
 }
 
@@ -292,14 +286,15 @@ void gen_s_instr (int vopt, ...) {
     int     rs1, rs2;
     int     hex_instr;
     int     imm;
-    int     funct_idx;
+    int     instr_idx;
+    
     int     funct3;
     int     opcode;
     int     i;
     va_list valist;
     unsigned int addr;
 
-    funct_idx  = 0;
+    instr_idx   = 0; 
     if (vopt) {
         va_start (valist, vopt);
         funct3  = va_arg (valist, int);
@@ -310,15 +305,15 @@ void gen_s_instr (int vopt, ...) {
 
         for (i = 0; i < 1; i++) {
             if (opcode_val_s_type[i] == funct3) {
-                funct_idx = i;
+                instr_idx = i;
                 break;
             }
         }
     }
     else {
-        funct_idx = rand()%1;
-        opcode      = ((opcode_val_s_type [funct_idx]) & 0x7f);
-        funct3      = ((opcode_val_s_type [funct_idx]) & 0x7000) >> 12;
+        instr_idx = rand()%1;
+        opcode      = ((opcode_val_s_type [instr_idx]) & 0x7f);
+        funct3      = ((opcode_val_s_type [instr_idx]) & 0x7000) >> 12;
         rs1         = rand() % 32;
         rs2         = rand() % 32;
         imm         = rand() % 0xFFF;   /* 12-bit signal */
@@ -367,7 +362,7 @@ void gen_s_instr (int vopt, ...) {
         update_cpu (MEM_TEXT_START, hex_instr);
     else
         update_cpu (prev_pc, hex_instr);
-    print_assembled_s_instr (funct_idx, rs1, rs2, imm);
+    print_assembled_s_instr (instr_idx, rs1, rs2, imm);
     instr_gen++;
 }
 
@@ -396,7 +391,7 @@ void gen_b_instr (int vopt, ...) {
     int     rs1, rs2;
     int     hex_instr;
     int     imm;
-    int     funct_idx;
+    int     instr_idx;
     int     funct3;
     int     i;
     int     opcode;
@@ -405,7 +400,7 @@ void gen_b_instr (int vopt, ...) {
     va_list valist;
 
     opcode  = 0;
-    funct_idx   = 0;
+    instr_idx   = 0;
 
     if (vopt) {
         va_start (valist, vopt);
@@ -417,16 +412,15 @@ void gen_b_instr (int vopt, ...) {
 
         for (i = 0; i < 3; i++) {
             if (opcode_val_b_type[i] == funct3) {
-                funct_idx = i;
+                instr_idx = i;
                 break;
             }
         }
     }
     else {
-        //funct_idx   = rand()%6;
-        funct_idx = 0;
-        opcode      = ((opcode_val_b_type [funct_idx]) & 0x7f);
-        funct3      = ((opcode_val_b_type [funct_idx]) & 0x7000) >> 12;
+        instr_idx   = rand()%6;
+        opcode      = ((opcode_val_b_type [instr_idx]) & 0x7f);
+        funct3      = ((opcode_val_b_type [instr_idx]) & 0x7000) >> 12;
         rs1         = rand() % 32;
         rs2         = rand() % 32;
     IMM_B:    
@@ -463,7 +457,7 @@ void gen_b_instr (int vopt, ...) {
         update_cpu (MEM_TEXT_START, hex_instr);
     else
         update_cpu (prev_pc, hex_instr);
-    print_assembled_b_instr (funct_idx, rs1, rs2, imm);
+    print_assembled_b_instr (instr_idx, rs1, rs2, imm);
     instr_gen++;
 }
 
@@ -521,12 +515,12 @@ void gen_u_instr (int vopt, ...) {
     int     rd;
     int     hex_instr;
     int     imm;
-    int     opcode_idx = 0;
+    int     instr_idx = 0;
     int     opcode;
     int     i;
     va_list valist;
 
-    opcode_idx  = 0; // Set default value of opcode index, which is selected of opcodes supported
+    instr_idx  = 0; // Set default value of opcode index, which is selected of opcodes supported
     if (vopt) {
         va_start (valist, vopt);
         opcode  = va_arg (valist, int);
@@ -536,14 +530,14 @@ void gen_u_instr (int vopt, ...) {
 
         for (i = 0; i < 3; i++) {
             if (opcode_val_u_type[i] == opcode) {
-                opcode_idx = i;
+                instr_idx = i;
                 break;
             }
         }
     }
     else {
-        opcode_idx  = rand()%2; // Random value for opcode, limited to # of supported codes
-        opcode      = ((opcode_val_u_type [opcode_idx]) & 0x7f);
+        instr_idx  = rand()%2; // Random value for opcode, limited to # of supported codes
+        opcode      = ((opcode_val_u_type [instr_idx]) & 0x7f);
         rd          = rand() % 32; // randomly set destination register value
         imm         = rand() % 0xFFFFF;   /* 20-bit signal */  // randomly set imm, within 20-bit limit
     }
@@ -556,7 +550,7 @@ void gen_u_instr (int vopt, ...) {
         update_cpu (MEM_TEXT_START, hex_instr);
     else
         update_cpu (prev_pc, hex_instr);
-    print_assembled_u_instr (opcode_idx, rd, imm);
+    print_assembled_u_instr (instr_idx, rd, imm);
     instr_gen++;
 }
 
@@ -579,7 +573,7 @@ void gen_j_instr (int vopt, ...) {
     va_list valist;
     int     i;
 
-    int     opcode_idx = rand()%1; // Randomly select one of supported I type instructions
+    int     instr_idx = rand()%1; // Randomly select one of supported I type instructions
 
 
     if (vopt) {
@@ -591,13 +585,13 @@ void gen_j_instr (int vopt, ...) {
 
         for (i = 0; i < 1; i++) {
             if (opcode_val_u_type[i] == opcode) {
-                opcode_idx = i;
+                instr_idx = i;
                 break;
             }
         }
     }
     else {
-        opcode      = ((opcode_val_j_type [opcode_idx]));
+        opcode      = ((opcode_val_j_type [instr_idx]));
         rd = rand() % 32; // randomly set destination register value
     IMM_J:
         // Original -- Needlessly larger than memory available, cycles too much
@@ -615,7 +609,7 @@ void gen_j_instr (int vopt, ...) {
     printf ("[%d] J Type instr generated - 0x%.7x\t\n", instr_gen, hex_instr);
     load_instr_opcode ((uint32_t) hex_instr);
     run (1);
-    print_assembled_j_instr (opcode_idx, rd, imm);
+    print_assembled_j_instr (instr_idx, rd, imm);
     if (instr_gen == 0)
         update_cpu (MEM_TEXT_START, hex_instr);
     else
