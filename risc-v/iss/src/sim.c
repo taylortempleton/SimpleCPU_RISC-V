@@ -54,7 +54,7 @@ int shift_const (unsigned int shamt) {
 }
 
 
-void execute_r (uint32_t rs1, uint32_t rs2, uint32_t rd, unsigned int funct7, unsigned int funct3) {
+void execute_r (uint32_t rs1, uint32_t rs2, uint32_t rd, unsigned int funct7, unsigned int funct3, int opcodefunct_mask) {
     int sign;
     int shift_val;
     unsigned int funct = ((funct7>>5 & 0x1) << 3) | funct3;
@@ -62,7 +62,7 @@ void execute_r (uint32_t rs1, uint32_t rs2, uint32_t rd, unsigned int funct7, un
         NEXT_STATE.PC = CURRENT_STATE.PC + 4;
         return;
     }
-    switch (funct) {
+    switch (opcodefunct_mask) {
         case (SLL): //SLL
             NEXT_STATE.REGS[rd] = CURRENT_STATE.REGS[rs1] << (CURRENT_STATE.REGS[rs2] & 0x1F);
             NEXT_STATE.PC = CURRENT_STATE.PC + 4;
@@ -211,7 +211,11 @@ void decode_r (uint32_t instr_opcode) {
     funct3 = (instr_opcode >> 12)   & 0x07;
     funct7 = (instr_opcode >> 25)   & 0x7F;
 
-    execute_r (rs1, rs2, rd, funct7, funct3);
+    // opcodefunct_mask makes use of the riscv provided mask from encoding.out.h,which specifies relevant bits for opcode/funct3/funt7 
+    // MASK variables designate funct3/7 and opcode bit positions, and so any MASK_### is valid for all instructions of same type
+    int opcodefunct_mask = instr_opcode & MASK_SLL;
+
+    execute_r (rs1, rs2, rd, funct7, funct3, opcodefunct_mask);
 }
 
 void execute_i (unsigned int funct3, int opcode, uint32_t rs1, uint32_t rd, int imm, int opcodefunct_mask) {
@@ -438,10 +442,9 @@ void decode_i (uint32_t instr_opcode) {
     unsigned int funct3; 
     int imm, opcode;
 
-    /*opcodefunct_mask makes use of the riscv provided mask from encoding.out.h, 
-    which specifies relevant opcode/funct3/funt7 
-    bits for a given instruction type */
-    int opcodefunct_mask = instr_opcode & MASK_JALR;
+    // opcodefunct_mask makes use of the riscv provided mask from encoding.out.h,which specifies relevant bits for opcode/funct3/funt7 
+    // MASK variables designate funct3/7 and opcode bit positions, and so any MASK_### is valid for all instructions of same type
+    int opcodefunct_mask = instr_opcode & MASK_JALR; 
 
     funct3 = (instr_opcode >> 12)   & 0x07;
     opcode = (instr_opcode      )   & 0x7F;
@@ -452,12 +455,12 @@ void decode_i (uint32_t instr_opcode) {
     execute_i (funct3, opcode, rs1, rd, imm, opcodefunct_mask);
 }
 
-void execute_s (unsigned int funct3, uint32_t rs1, uint32_t rs2, int imm) {
+void execute_s (unsigned int funct3, uint32_t rs1, uint32_t rs2, int imm, int opcodefunct_mask) {
     int sign;
     int shift_val;
     uint32_t address;
     //printf ("B-type instruction\tOpcode is :0x%x\n", opcode);
-    switch (funct3) {
+    switch (opcodefunct_mask) {
         case (SB): //SB
             shift_val = shift_const(12);
             sign = (imm & 0x800)>>11;
@@ -523,15 +526,19 @@ void decode_s (uint32_t instr_opcode) {
     imm    = (((instr_opcode >> 25)   & 0x7F) << 5)  |
              (((instr_opcode >> 7)    & 0x1F));
 
-    execute_s (funct3, rs1, rs2, imm);
+    // opcodefunct_mask makes use of the riscv provided mask from encoding.out.h,which specifies relevant bits for opcode/funct3/funt7 
+    // MASK variables designate funct3/7 and opcode bit positions, and so any MASK_### is valid for all instructions of same type
+    int opcodefunct_mask = instr_opcode & MASK_SW;
+
+    execute_s (funct3, rs1, rs2, imm, opcodefunct_mask);
 }
 
-void execute_b (unsigned int funct3, uint32_t rs1, uint32_t rs2, int imm) {
+void execute_b (unsigned int funct3, uint32_t rs1, uint32_t rs2, int imm, int opcodefunct_mask) {
     int sign;
     int shift_val;
     uint32_t address;
     //printf ("B-type instruction\tOpcode is :0x%x\n", opcode);
-    switch (funct3) {
+    switch (opcodefunct_mask) {
         case (BEQ): //BEQ
             if (CURRENT_STATE.REGS[rs1] == CURRENT_STATE.REGS[rs2]) {
                 shift_val = shift_const(19);
@@ -663,12 +670,16 @@ void decode_b (uint32_t instr_opcode) {
              (((instr_opcode >> 25)   & 0x3F) << 5)  |
              (((instr_opcode >> 8)    & 0x0F) << 1);
 
-    execute_b (funct3, rs1, rs2, imm);
+    // opcodefunct_mask makes use of the riscv provided mask from encoding.out.h,which specifies relevant bits for opcode/funct3/funt7 
+    // MASK variables designate funct3/7 and opcode bit positions, and so any MASK_### is valid for all instructions of same type
+    int opcodefunct_mask = instr_opcode & MASK_BEQ;
+
+    execute_b (funct3, rs1, rs2, imm, opcodefunct_mask);
 }
 
-void execute_u (int opcode, uint32_t rd, int imm) {
+void execute_u (int opcode, uint32_t rd, int imm, int opcodefunct_mask) {
     int u_val;
-    switch (opcode) {
+    switch (opcodefunct_mask) {
         case (MATCH_LUI): //LUI
             u_val = imm << 12;
             NEXT_STATE.REGS[rd] = rd ? u_val : 0;
@@ -706,10 +717,14 @@ void decode_u (uint32_t instr_opcode) {
     rd      = (instr_opcode >> 7)   & 0x1F;
     imm     = (instr_opcode >> 12)  & 0xFFFFF;
 
-    execute_u (opcode, rd, imm);
+    // opcodefunct_mask makes use of the riscv provided mask from encoding.out.h,which specifies relevant bits for opcode/funct3/funt7 
+    // MASK variables designate funct3/7 and opcode bit positions, and so any MASK_### is valid for all instructions of same type
+    int opcodefunct_mask = instr_opcode & MASK_LUI;
+
+    execute_u (opcode, rd, imm, opcodefunct_mask);
 }
 
-void execute_j (uint32_t rd, int imm) {
+void execute_j (uint32_t rd, int imm, int opcodefunct_mask) {
     int address;
     int sign;
     int shift_val;
@@ -739,7 +754,11 @@ void decode_j (uint32_t instr_opcode) {
               (((instr_opcode >> 20)  & 0x01)  << 11) |
               (((instr_opcode >> 21)  & 0x3FF) << 1);
 
-    execute_j (rd, imm);
+    // opcodefunct_mask makes use of the riscv provided mask from encoding.out.h,which specifies relevant bits for opcode/funct3/funt7 
+    // MASK variables designate funct3/7 and opcode bit positions, and so any MASK_### is valid for all instructions of same type
+    int opcodefunct_mask = instr_opcode & MASK_JAL;
+
+    execute_j (rd, imm, opcodefunct_mask);
 }
 
 void process_instruction() {
