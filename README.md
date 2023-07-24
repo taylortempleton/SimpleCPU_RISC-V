@@ -1,5 +1,13 @@
-***Note: Overwhelming majority of project is the work of Tenstorrent engineering genius Rahul B.  My contributions not merged until closer to final & approved by project owner.  I would never want to take credit for any of the massive amount of work of Rahul.
-https://www.linkedin.com/in/raulbehl/
+***Note: Overwhelming majority of project is the work of Tenstorrent engineering genius Rahul B.  My contributions not merged until closer to final & approved by project owner.  I would never want to take credit for any of the massive amount of work of Rahul Behl.
+* https://www.linkedin.com/in/raulbehl/
+
+Taylor's contributions:
+* Correct JALR instruction function. (Complete)
+* Correct infinite loop bug of i-type and j-type instructions. (Complete)
+* Create Verilator testbench. (Complete)
+* Add hex_gen support for remaining unsupported RISC-V instructions (In progress)
+-----------------
+
 
 
 # [SimpleCPU]( https://simplecpu.github.io/)
