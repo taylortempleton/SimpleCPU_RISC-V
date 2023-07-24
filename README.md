@@ -1,3 +1,7 @@
+***Note: Overwhelming majority of project is the work of Tenstorrent engineering genius Rahul B.  My contributions not merged until closer to final & approved by project owner.  I would never want to take credit for any of the massive amount of work of Rahul.
+https://www.linkedin.com/in/raulbehl/
+
+
 # [SimpleCPU]( https://simplecpu.github.io/)
 An open source CPU design and verification platform for academia 
 
