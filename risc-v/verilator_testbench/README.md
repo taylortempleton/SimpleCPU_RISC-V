@@ -1,6 +1,6 @@
 Instructions to run the Verilator/C++ testbench, useful for investigatng waveforms and block-to-block interactions is below.
 
-![](https://github.com/taylortempleton/SimpleCPU_RISC-V/blob/master/risc-v/docs/gtkwaveform.png)
+
 
 1. Generate a set of instructions for the CPU to run
 	* cd to hex_gen directory
@@ -23,4 +23,6 @@ Instructions to run the Verilator/C++ testbench, useful for investigatng wavefor
 	* View waves. Will automatically open gtkwave and show waveforms.
 	  * $ make waves
 	
+Example gtkwave output:
+![](https://github.com/taylortempleton/SimpleCPU_RISC-V/blob/master/risc-v/docs/gtkwaveform.png)
 
