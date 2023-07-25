@@ -296,7 +296,7 @@ function void init_imem (string test_name);
     string instr_hex_s;
     string pc_values_hex_s;
     
-    instr_hex_s     = {test_name, ".hex"};
+    instr_hex_s     = {test_name, "_instr.hex"};
     pc_values_hex_s = {test_name, "_pc.hex"};
     
 

@@ -803,8 +803,8 @@ int main (int argc, char* argv[]) {
   //  gen_user_test ();
 //#endif
    // gen_end_seq ();
-    pc_hex_val    = fopen ("pc_values_hex", "w");
-    instr_hex_val = fopen ("instr_hex", "w");
+    pc_hex_val    = fopen ("test_pc.hex", "w");
+    instr_hex_val = fopen ("test_instr.hex", "w");
     print_to_file (pc_hex_val, instr_hex_val);
     return 0;
 }

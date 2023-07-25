@@ -16,4 +16,4 @@ hex_preload: src/*.c
 
 .PHONY: clean
 clean:
-	rm -rf hex_gen pc_values_hex instr_hex
+	rm -rf hex_gen test_pc.hex test_instr.hex
