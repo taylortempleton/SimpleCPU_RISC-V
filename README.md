@@ -1,7 +1,7 @@
-***Note: Overwhelming majority of this project is the work of Tenstorrent engineering genius Rahul B.  My contributions are listed below.
+***Note: Overwhelming majority of the SimpleCPU project is the work of Tenstorrent engineering genius Rahul Behl.  
 * https://www.linkedin.com/in/raulbehl/
 
-Taylor's contributions, not yet merged to master:
+Taylor's contributions, not yet merged:
 * Correct infinite loop bug of i-type and j-type instructions. (Complete)
 * Correct JALR instruction function. (Complete)
 * Create Verilator testbench for verification purposes. (Complete)
