@@ -1,4 +1,4 @@
-***Note: Overwhelming majority of project is the work of Tenstorrent engineering genius Rahul B.  
+***Note: Overwhelming majority of this project is the work of Tenstorrent engineering genius Rahul B.  My contributions are listed below.
 * https://www.linkedin.com/in/raulbehl/
 
 Taylor's contributions, not yet merged to master:
@@ -7,6 +7,34 @@ Taylor's contributions, not yet merged to master:
 * Create Verilator testbench for verification purposes. (Complete)
 * Add hex_gen support for remaining unsupported RISC-V instructions (In progress)
 -----------------
+
+Instructions to run a randomly generated risc-v instruction sequence on the simple CPU, and view waves forms with the Verilator/C++ testbench, useful for verification:
+
+1. Generate libhex.so
+2. Generate a set of instructions for the CPU to run
+	* cd to hex_gen directory
+	* Run make to create an executable.
+	  * $ make
+	* Run hex_gen executable within input to specify how many instructions you want. To generate 2 i-type instructions, 3 j-type instructions and 5 r-type instructions run:
+	  * $ ./hex_gen -i 2 -j 3 -r 5
+	* Copy the 2 output hex files into the verilator_testbench directory: test_instr.hex and test_pc.hex.
+
+3. Run Verilator
+	* cd to the verilator_testbench directory
+	* Run verilate
+  	  * $ make verilate
+	* Run build
+	  * $ make build
+	* In Makefile, make sure the +test flag matches the .hex file names.  It will by default, but will need to be updated to match the hex files if a custom name was chosen.  Under .stamp.sim:
+	+test=***UPDATE IF A CUSTOM TEST NAME WAS USED*** \
+	* Run simulation.
+	  * $ make sim
+	* View waves. Will automatically open gtkwave and show waveforms.
+	  * $ make waves
+	
+Example gtkwave output:
+![](https://github.com/taylortempleton/SimpleCPU_RISC-V/blob/master/risc-v/docs/gtkwaveform_dummy.png)
+
 
 
 
