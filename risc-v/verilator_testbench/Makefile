@@ -10,6 +10,8 @@ verilate: .stamp.verilate
 	-Wno-CASEINCOMPLETE -Wno-UNDRIVEN -Wno-UNUSEDPARAM -Wno-LITENDIAN -Wno-IMPLICITSTATIC \
 	-Wno-WIDTHTRUNC -Wno-WIDTHEXPAND -Wno-VARHIDDEN -Wno-IMPLICIT -Wno-EOFNEWLINE -Wno-PINCONNECTEMPTY \
 	-top-module top_tb --cc \
+	../riscv-pipeline/verilog/riscv_alu_defines.v \
+	../riscv-pipeline/verilog/riscv_instr_defines.v \
 	../riscv-pipeline/verilog/*.v \
 	../riscv-pipeline/testbench/top_tb.sv \
 	-exe testbench.cpp

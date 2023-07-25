@@ -1,4 +1,3 @@
-`include "riscv_instr_defines.v"
 
 module sign_extnd_12bit
     (

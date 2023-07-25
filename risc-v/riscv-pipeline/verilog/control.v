@@ -1,5 +1,4 @@
 //Control circuit             
-`include "riscv_instr_defines.v"
 
 module control
     (

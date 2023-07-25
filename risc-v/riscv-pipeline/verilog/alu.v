@@ -1,5 +1,4 @@
 // ALU implementation
-`include "riscv_alu_defines.v"
 
 module alu
     (

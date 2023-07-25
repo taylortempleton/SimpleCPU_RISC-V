@@ -1,5 +1,4 @@
 //Instruction decoder
-`include "riscv_instr_defines.v"
 
 module decode 
     (
