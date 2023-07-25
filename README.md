@@ -1,10 +1,10 @@
-***Note: Overwhelming majority of project is the work of Tenstorrent engineering genius Rahul B.  My contributions not merged until closer to final & approved by project owner.  I would never want to take credit for any of the massive amount of work of Rahul Behl.
+***Note: Overwhelming majority of project is the work of Tenstorrent engineering genius Rahul B.  
 * https://www.linkedin.com/in/raulbehl/
 
-Taylor's contributions:
-* Correct JALR instruction function. (Complete)
+Taylor's contributions, not yet merged to master:
 * Correct infinite loop bug of i-type and j-type instructions. (Complete)
-* Create Verilator testbench. (Complete)
+* Correct JALR instruction function. (Complete)
+* Create Verilator testbench for verification purposes. (Complete)
 * Add hex_gen support for remaining unsupported RISC-V instructions (In progress)
 -----------------
 
