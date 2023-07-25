@@ -11,15 +11,15 @@ Instructions to run the Verilator/C++ testbench, useful for investigatng wavefor
 	Copy the 2 output hex files into the verilator_testbench directory: test_instr.hex and test_pc.hex.
 
 2. cd to verilator_testbench directory
-	Run verilate
-		$ make verilate
-	Run build
-		$ make build
-	In Makefile, update test name to match hex files if running specially named test:
-		+test=test \
-	Run simulation.
-		$ make sim
-	View waves. Will automatically open gtkwave and show waveforms.
-		$ make waves
+	* Run verilate
+		* $ make verilate
+	* Run build
+		* $ make build
+	* In Makefile, update test name to match hex files if running specially named test:
+		* +test=***UPDATE ME TO ANY CUSTOM TEST NAME*** \
+	* Run simulation.
+		* $ make sim
+	* View waves. Will automatically open gtkwave and show waveforms.
+		* $ make waves
 	
 
