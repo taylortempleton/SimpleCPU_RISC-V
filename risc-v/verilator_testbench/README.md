@@ -1,7 +1,6 @@
 Instructions to run the Verilator/C++ testbench, useful for investigatng waveforms and block-to-block interactions is below.
 
-![](https://github.com/taylortempleton/SimpleCPU_RISC-V/risc-v/docs/gtkwaveform.png)
-
+![](https://github.com/taylortempleton/SimpleCPU_RISC-V/blob/master/risc-v/docs/gtkwaveform.png)
 
 
 1) Set directory to Verilator_Testbench
