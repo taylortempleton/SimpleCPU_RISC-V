@@ -10,8 +10,12 @@ Taylor's contributions, not yet merged:
 
 Instructions to run a randomly generated risc-v instruction sequence on the simple CPU, and view waves forms with the Verilator/C++ testbench, useful for verification:
 
-1. Generate libhex.so
-2. Generate a set of instructions for the CPU to run
+1. Generate libhex.so shared object with iss, for use with hex_gen
+   	* cd to iss directory
+   	* Run make to create libhex.so
+   	  * $ make
+   	* Copy libhex.so to hex_gen/lib directory
+3. Generate a set of instructions for the CPU to run
 	* cd to hex_gen directory
 	* Run make to create an executable.
 	  * $ make
@@ -19,7 +23,7 @@ Instructions to run a randomly generated risc-v instruction sequence on the simp
 	  * $ ./hex_gen -i 2 -j 3 -r 5
 	* Copy the 2 output hex files into the verilator_testbench directory: test_instr.hex and test_pc.hex.
 
-3. Run Verilator
+4. Run Verilator
 	* cd to the verilator_testbench directory
 	* Run verilate
   	  * $ make verilate
