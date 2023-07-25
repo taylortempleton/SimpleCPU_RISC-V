@@ -25,10 +25,12 @@ VL_INLINE_OPT VlCoroutine Vtop_tb___024root___eval_initial__TOP__0(Vtop_tb___024
     Vtop_tb__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop_tb___024root___eval_initial__TOP__0\n"); );
     // Init
-    IData/*31:0*/ __Vtask_top_tb__DOT__init_dmem__0__unnamedblk3__DOT__i;
-    __Vtask_top_tb__DOT__init_dmem__0__unnamedblk3__DOT__i = 0;
-    IData/*31:0*/ __Vtask_top_tb__DOT__boot_code__1__unnamedblk2__DOT__i;
-    __Vtask_top_tb__DOT__boot_code__1__unnamedblk2__DOT__i = 0;
+    IData/*31:0*/ __Vtask_top_tb__DOT__init_imem__0__unnamedblk4__DOT__i;
+    __Vtask_top_tb__DOT__init_imem__0__unnamedblk4__DOT__i = 0;
+    IData/*31:0*/ __Vtask_top_tb__DOT__init_dmem__1__unnamedblk3__DOT__i;
+    __Vtask_top_tb__DOT__init_dmem__1__unnamedblk3__DOT__i = 0;
+    IData/*31:0*/ __Vtask_top_tb__DOT__boot_code__2__unnamedblk2__DOT__i;
+    __Vtask_top_tb__DOT__boot_code__2__unnamedblk2__DOT__i = 0;
     VlWide<5>/*159:0*/ __Vtemp_h6d63c421__0;
     VlWide<5>/*159:0*/ __Vtemp_h6d63c421__1;
     VlWide<5>/*159:0*/ __Vtemp_h6d63c421__2;
@@ -61,12 +63,33 @@ VL_INLINE_OPT VlCoroutine Vtop_tb___024root___eval_initial__TOP__0(Vtop_tb___024
     VlWide<5>/*159:0*/ __Vtemp_h6d63c421__29;
     VlWide<5>/*159:0*/ __Vtemp_h6d63c421__30;
     // Body
-    __Vtask_top_tb__DOT__init_dmem__0__unnamedblk3__DOT__i = 0U;
-    while ((0x40000U > __Vtask_top_tb__DOT__init_dmem__0__unnamedblk3__DOT__i)) {
+    VL_READMEM_N(true, 32, 2048, 0, std::string{"taylortest.hex"}
+                 ,  &(vlSelf->top_tb__DOT__init_imem__Vstatic__instr_hex)
+                 , 0U, ~0ULL);
+    VL_READMEM_N(true, 32, 2048, 0, std::string{"taylortest_pc.hex"}
+                 ,  &(vlSelf->top_tb__DOT__init_imem__Vstatic__pc_val)
+                 , 0U, ~0ULL);
+    __Vtask_top_tb__DOT__init_imem__0__unnamedblk4__DOT__i = 0U;
+    while ((0U != vlSelf->top_tb__DOT__init_imem__Vstatic__instr_hex
+            [(0x7ffU & __Vtask_top_tb__DOT__init_imem__0__unnamedblk4__DOT__i)])) {
+        vlSelf->top_tb__DOT__T1__DOT__I_MEM1__DOT__imem[(0x7ffU 
+                                                         & ((vlSelf->top_tb__DOT__init_imem__Vstatic__pc_val
+                                                             [
+                                                             (0x7ffU 
+                                                              & __Vtask_top_tb__DOT__init_imem__0__unnamedblk4__DOT__i)] 
+                                                             - (IData)(0x2000U)) 
+                                                            >> 2U))] 
+            = vlSelf->top_tb__DOT__init_imem__Vstatic__instr_hex
+            [(0x7ffU & __Vtask_top_tb__DOT__init_imem__0__unnamedblk4__DOT__i)];
+        __Vtask_top_tb__DOT__init_imem__0__unnamedblk4__DOT__i 
+            = ((IData)(1U) + __Vtask_top_tb__DOT__init_imem__0__unnamedblk4__DOT__i);
+    }
+    __Vtask_top_tb__DOT__init_dmem__1__unnamedblk3__DOT__i = 0U;
+    while ((0x40000U > __Vtask_top_tb__DOT__init_dmem__1__unnamedblk3__DOT__i)) {
         vlSelf->top_tb__DOT__T1__DOT__D_MEM1__DOT__dmem[(0x1fffU 
-                                                         & __Vtask_top_tb__DOT__init_dmem__0__unnamedblk3__DOT__i)] = 0xefefefefU;
-        __Vtask_top_tb__DOT__init_dmem__0__unnamedblk3__DOT__i 
-            = ((IData)(1U) + __Vtask_top_tb__DOT__init_dmem__0__unnamedblk3__DOT__i);
+                                                         & __Vtask_top_tb__DOT__init_dmem__1__unnamedblk3__DOT__i)] = 0xefefefefU;
+        __Vtask_top_tb__DOT__init_dmem__1__unnamedblk3__DOT__i 
+            = ((IData)(1U) + __Vtask_top_tb__DOT__init_dmem__1__unnamedblk3__DOT__i);
     }
     vlSelf->top_tb__DOT__T1__DOT__R1__DOT__reg_file[0U] = 0U;
     __Vtemp_h6d63c421__0[0U] = 0x72656773U;
@@ -317,14 +340,14 @@ VL_INLINE_OPT VlCoroutine Vtop_tb___024root___eval_initial__TOP__0(Vtop_tb___024
     vlSelf->top_tb__DOT__T1__DOT__R1__DOT__reg_file[0x1fU] 
         = (VL_TESTPLUSARGS_I(VL_CVT_PACK_STR_NW(5, __Vtemp_h6d63c421__30))
             ? 0x3e1U : 0U);
-    __Vtask_top_tb__DOT__boot_code__1__unnamedblk2__DOT__i = 0U;
-    while (VL_GTS_III(32, 0x400U, __Vtask_top_tb__DOT__boot_code__1__unnamedblk2__DOT__i)) {
+    __Vtask_top_tb__DOT__boot_code__2__unnamedblk2__DOT__i = 0U;
+    while (VL_GTS_III(32, 0x400U, __Vtask_top_tb__DOT__boot_code__2__unnamedblk2__DOT__i)) {
         vlSelf->top_tb__DOT__T1__DOT__BPRED__DOT__bpred[(0x3ffU 
-                                                         & __Vtask_top_tb__DOT__boot_code__1__unnamedblk2__DOT__i)] = 0U;
+                                                         & __Vtask_top_tb__DOT__boot_code__2__unnamedblk2__DOT__i)] = 0U;
         vlSelf->top_tb__DOT__T1__DOT__BPRED__DOT__btb[(0x3ffU 
-                                                       & __Vtask_top_tb__DOT__boot_code__1__unnamedblk2__DOT__i)] = 0U;
-        __Vtask_top_tb__DOT__boot_code__1__unnamedblk2__DOT__i 
-            = ((IData)(1U) + __Vtask_top_tb__DOT__boot_code__1__unnamedblk2__DOT__i);
+                                                       & __Vtask_top_tb__DOT__boot_code__2__unnamedblk2__DOT__i)] = 0U;
+        __Vtask_top_tb__DOT__boot_code__2__unnamedblk2__DOT__i 
+            = ((IData)(1U) + __Vtask_top_tb__DOT__boot_code__2__unnamedblk2__DOT__i);
     }
     VL_WRITEF("CPU initialised\n\n");
     vlSelf->top_tb__DOT__reset_tb = 1U;

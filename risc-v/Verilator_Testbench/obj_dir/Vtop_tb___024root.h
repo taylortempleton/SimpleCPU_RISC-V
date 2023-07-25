@@ -175,6 +175,8 @@ class Vtop_tb___024root final : public VerilatedModule {
         IData/*31:0*/ __Vdlyvval__top_tb__DOT__T1__DOT__I_MEM1__DOT__imem__v0;
         IData/*31:0*/ __VstlIterCount;
         IData/*31:0*/ __VactIterCount;
+        VlUnpacked<IData/*31:0*/, 2048> top_tb__DOT__init_imem__Vstatic__instr_hex;
+        VlUnpacked<IData/*31:0*/, 2048> top_tb__DOT__init_imem__Vstatic__pc_val;
         VlUnpacked<IData/*31:0*/, 2048> top_tb__DOT__T1__DOT__I_MEM1__DOT__imem;
         VlUnpacked<CData/*1:0*/, 1024> top_tb__DOT__T1__DOT__BPRED__DOT__bpred;
         VlUnpacked<IData/*31:0*/, 1024> top_tb__DOT__T1__DOT__BPRED__DOT__btb;

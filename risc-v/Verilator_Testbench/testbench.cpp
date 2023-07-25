@@ -28,4 +28,5 @@ int main(int argc, char** argv, char** env){
     m_trace->close();
     delete dut;
     exit(EXIT_SUCCESS);
+    
 }

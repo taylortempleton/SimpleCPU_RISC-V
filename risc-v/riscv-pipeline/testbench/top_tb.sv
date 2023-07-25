@@ -132,8 +132,8 @@ import "DPI-C" function int  compare_j (int pc, int instr, int rd, int rd_val);
     begin
         //if (!($value$plusargs("test=%s", test_name)))
         //  $fatal ("No test name given");
-        //init_imem (test_name);
-        test_name = "taylortest";
+        test_name = "taylortest"; // **** DEBUG
+        init_imem (test_name);
         init_dmem ();
         boot_code ();
         //init (test_name);
