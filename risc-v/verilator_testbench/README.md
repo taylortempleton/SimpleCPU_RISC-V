@@ -24,5 +24,5 @@ Instructions to run the Verilator/C++ testbench, useful for investigatng wavefor
 	  * $ make waves
 	
 Example gtkwave output:
-![](https://github.com/taylortempleton/SimpleCPU_RISC-V/blob/master/risc-v/docs/gtkwavefrm.png)
+![](https://github.com/taylortempleton/SimpleCPU_RISC-V/blob/master/risc-v/docs/gtkwaveform_dummy.png)
 
