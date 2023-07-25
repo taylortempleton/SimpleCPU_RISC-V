@@ -1,5 +1,5 @@
 // Top module connecting all the other modules
-`include "verilog/riscv_instr_defines.v"
+`include "riscv_instr_defines.v"
 
 module top
     (

@@ -1,9 +1,19 @@
 // Top testbench
 
-module top_tb ();
+module top_tb (
+    input master_clk
+);
+
+// **** Debug ****
+// `include functions temporarily copied at bottom to avoid include issues
+/*
 `include "testbench/init_imem.sv"
 `include "testbench/init_dmem.sv"
 `include "testbench/boot_code.sv"
+*/
+
+// **** Debug
+/*
 import "DPI-C" function void init (string test_name);
 import "DPI-C" function void run (int cycles);
 import "DPI-C" function int  compare_r (int pc, int instr, int rd, int rs1, int rs2,
@@ -16,8 +26,9 @@ import "DPI-C" function int  compare_b (int pc, int instr, int rs1, int rs2,
                                         int rs1_val, int rs2_val);
 import "DPI-C" function int  compare_u (int pc, int instr, int rd, int rd_val);
 import "DPI-C" function int  compare_j (int pc, int instr, int rd, int rd_val);
-
-    logic   clk_tb, reset_tb;
+*/
+    //logic   clk_tb, reset_tb;
+    logic reset_tb;
     string  test_name;
 
     // Fetch stage signals
@@ -110,26 +121,30 @@ import "DPI-C" function int  compare_j (int pc, int instr, int rd, int rd_val);
     assign rs2_val_wb        = T1.R1.reg_file[rs2_wb];
 
     top T1 (
-        .clk (clk_tb),
+        .clk (master_clk),
         .reset (reset_tb)
     );
 
-    localparam T = 40;
+    // Local clock param no longer needed, supplied by verilator tb
+    //localparam T = 40;
     
     initial
     begin
-        if (!($value$plusargs("test=%s", test_name)))
-          $fatal ("No test name given");
-        init_imem (test_name);
+        //if (!($value$plusargs("test=%s", test_name)))
+        //  $fatal ("No test name given");
+        //init_imem (test_name);
+        test_name = "taylortest";
         init_dmem ();
         boot_code ();
-        init (test_name);
+        //init (test_name);
         $display ("CPU initialised\n");
         reset_tb = 1'b1;
-        repeat (5) @(posedge clk_tb);
+        repeat (5) @(posedge master_clk);
         reset_tb = 1'b0;
     end
 
+// Do not need, using clock defined in .cpp verilator testbench module
+    /*
     always
     begin
         clk_tb = 1'b0;
@@ -137,6 +152,8 @@ import "DPI-C" function int  compare_j (int pc, int instr, int rd, int rd_val);
         clk_tb = 1'b1;
         # (T/2);
     end
+
+    // **** Debug - No model/ISS comparison temporarily
 
     // ISSUE
     always @ (posedge clk_tb)
@@ -193,6 +210,9 @@ import "DPI-C" function int  compare_j (int pc, int instr, int rd, int rd_val);
         rd_wb           <=  rd_mem;
     end
 
+// **** Debug
+// No model/ISS, temporarily
+
     always @ (posedge clk_tb)
     if (instr_retired_wb)
     begin
@@ -237,5 +257,56 @@ import "DPI-C" function int  compare_j (int pc, int instr, int rd, int rd_val);
         if (instr_count == 200)
             $finish ();
     end
+    */
+
+
+function void boot_code ();
+    for (int i = 0; i < 32; i++)
+    begin
+        if ($test$plusargs("preload_arch_regs"))
+            T1.R1.reg_file [i] = (i*32 + i%3);
+        else
+            T1.R1.reg_file [i] = 0;
+    end
+    for (int i = 0; i < 1024; i++)
+    begin
+        T1.BPRED.bpred[i] = 0;
+        T1.BPRED.btb[i] = 0;
+    end
+
+endfunction
+
+function void init_dmem ();
+    for (int i = 0; i < 32'h40000; i=i+1)
+    begin
+        T1.D_MEM1.dmem [i] = 32'hefefefef;
+    end
+
+endfunction
+
+function void init_imem (string test_name);
+    logic [31:0] instr_hex [2047:0];
+    logic [31:0] pc_val [2047:0];
+    
+    parameter instr_seg_begin = 32'h2000,
+              instr_seg_size  = 32'h1FFF;
+
+    string instr_hex_s;
+    string pc_values_hex_s;
+    
+    instr_hex_s     = {test_name, ".hex"};
+    pc_values_hex_s = {test_name, "_pc.hex"};
+    
+
+    $readmemh (instr_hex_s, instr_hex, 0);
+    $readmemh (pc_values_hex_s, pc_val, 0);
+
+    for (int i = 0; instr_hex[i]; i++) 
+    begin
+        //$display ("Loading %x at %x\n", instr_hex[i], pc_val[i]);
+        T1.I_MEM1.imem [(pc_val[i]-instr_seg_begin)>>2] = instr_hex[i];
+    end
+
+endfunction
 
 endmodule

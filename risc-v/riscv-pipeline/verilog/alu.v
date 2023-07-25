@@ -1,5 +1,5 @@
 // ALU implementation
-`include "verilog/riscv_alu_defines.v"
+`include "riscv_alu_defines.v"
 
 module alu
     (
