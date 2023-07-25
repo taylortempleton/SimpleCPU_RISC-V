@@ -16,15 +16,8 @@ Instructions to run the Verilator/C++ testbench, useful for investigatng wavefor
   	  * $ make verilate
 	* Run build
 	  * $ make build
-	* In Makefile, update test name to match hex files if running specially named test:
-
-	.stamp.sim:
-	@echo
-	@echo "### Simulating ###"
-	@echo
-	./obj_dir/Vtop_tb \
-	+test=***UPDATE ME TO ANY CUSTOM TEST NAME*** \
-	
+	* In Makefile, make sure the +test flag matches the .hex file names.  It will by default, but will need to be updated to match the hex files if a custom name was chosen.  Under .stamp.sim:
+	+test=***UPDATE IF A CUSTOM TEST NAME WAS USED*** \
 	* Run simulation.
 	  * $ make sim
 	* View waves. Will automatically open gtkwave and show waveforms.
