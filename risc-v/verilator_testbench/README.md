@@ -2,20 +2,24 @@ Instructions to run the Verilator/C++ testbench, useful for investigatng wavefor
 
 ![](https://github.com/taylortempleton/SimpleCPU_RISC-V/blob/master/risc-v/docs/gtkwaveform.png)
 
+1. Generate a set of instructions
+	cd hex_gen directory
+	Run make
+		$ make
+	Run hex_gen executable. To generate 2 i-type instructions, 3 j-type instructions and 5 r-type instructions run:
+		$ ./hex_gen -i 2 -j 3 -r 5
+	Copy the 2 output hex files into the verilator_testbench directory: test_instr.hex and test_pc.hex.
 
-1) Set directory to Verilator_Testbench
-2) Check RTL to cpp conversion. Creates folder 'obj_dir' where converted sources written:
-$	make verilate
-3) (Create cpp tb and include relevant libraries)
-4) Re run Verilator with --exe testbench.cpp.  Will create build instructions for make. (Verilated RTL and cpp tb are effectively C++ application that computer can run.) To build the simulation executable, we need to RErun Verilator again to regenerate the .mk files to include the C++ testbench.  Regenerates .mk, not much else new.
-$	make verilate
-5)$ make build
+2. cd to verilator_testbench directory
+	Run verilate
+		$ make verilate
+	Run build
+		$ make build
+	In Makefile, update test name to match hex files if running specially named test:
+		+test=test \
+	Run simulation.
+		$ make sim
+	View waves. Will automatically open gtkwave and show waveforms.
+		$ make waves
+	
 
-***specify which test should be run
-
-6) Actually run sim, specifying test to be used
-$ make sim
-	./obj_dir/Vtop_tb \
-		"+test=taylortest"
-7) View waveforms in gtkwave
-8) $ make waves
