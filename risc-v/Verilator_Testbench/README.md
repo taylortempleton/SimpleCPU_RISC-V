@@ -18,8 +18,11 @@ $ make sim
 
 7)$ make waves
 
-*** Current Status / Current Error ***
+*** Current Status / Current Errors ***
 *6/27
 Success! Crude program running
 * hexgen currently required i and j instructions set to 0, to avoid looping check_j_addr function
 * have to rename hex files to have proper format
+
+*7/24
+Push functioning version to github
