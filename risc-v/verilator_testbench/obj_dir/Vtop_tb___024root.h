@@ -184,6 +184,7 @@ class Vtop_tb___024root final : public VerilatedModule {
         VlUnpacked<IData/*31:0*/, 8192> top_tb__DOT__T1__DOT__D_MEM1__DOT__dmem;
         VlUnpacked<CData/*0:0*/, 13> __Vm_traceActivity;
     };
+    std::string top_tb__DOT__test_name;
     VlTriggerScheduler __VtrigSched_h3e8c3e9a__0;
     VlTriggerVec<1> __VstlTriggered;
     VlTriggerVec<3> __VactTriggered;

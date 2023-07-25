@@ -10,6 +10,9 @@ $	make verilate
 4) Re run Verilator with --exe testbench.cpp.  Will create build instructions for make. (Verilated RTL and cpp tb are effectively C++ application that computer can run.) To build the simulation executable, we need to RErun Verilator again to regenerate the .mk files to include the C++ testbench.  Regenerates .mk, not much else new.
 $	make verilate
 5)$ make build
+
+***specify which test should be run
+
 6) Actually run sim, specifying test to be used
 $ make sim
 	./obj_dir/Vtop_tb \

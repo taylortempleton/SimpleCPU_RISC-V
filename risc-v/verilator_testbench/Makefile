@@ -6,7 +6,8 @@ verilate: .stamp.verilate
 	@echo "### Verilating ###"
 	@echo
 	verilator \
-	-Wall -trace --timing -Wno-UNUSEDSIGNAL -Wno-BLKSEQ -Wno-SYNCASYNCNET -Wno-CASEOVERLAP \
+	-Wall -trace --timing \
+	-Wno-UNUSEDSIGNAL -Wno-BLKSEQ -Wno-SYNCASYNCNET -Wno-CASEOVERLAP \
 	-Wno-CASEINCOMPLETE -Wno-UNDRIVEN -Wno-UNUSEDPARAM -Wno-LITENDIAN -Wno-IMPLICITSTATIC \
 	-Wno-WIDTHTRUNC -Wno-WIDTHEXPAND -Wno-VARHIDDEN -Wno-IMPLICIT -Wno-EOFNEWLINE -Wno-PINCONNECTEMPTY \
 	-top-module top_tb --cc \
@@ -35,7 +36,7 @@ sim: .stamp.sim
 	@echo "### Simulating ###"
 	@echo
 	./obj_dir/Vtop_tb \
-	"+test = taylortest"
+	+test=taylortest \
 
 
 .PHONY: waves

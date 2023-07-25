@@ -33,6 +33,9 @@ class Vtop_tb__Syms final : public VerilatedSyms {
     Vtop_tb_adder                  TOP__top_tb__DOT__T1__DOT__ADD1;
     Vtop_tb_adder                  TOP__top_tb__DOT__T1__DOT__ADD2;
 
+    // SCOPE NAMES
+    VerilatedScope __Vscope_top_tb;
+
     // CONSTRUCTORS
     Vtop_tb__Syms(VerilatedContext* contextp, const char* namep, Vtop_tb* modelp);
     ~Vtop_tb__Syms();

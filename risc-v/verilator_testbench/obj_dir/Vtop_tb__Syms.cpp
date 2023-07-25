@@ -33,4 +33,6 @@ Vtop_tb__Syms::Vtop_tb__Syms(VerilatedContext* contextp, const char* namep, Vtop
     TOP__top_tb__DOT__T1__DOT__A1__DOT__A1.__Vconfigure(true);
     TOP__top_tb__DOT__T1__DOT__ADD1.__Vconfigure(false);
     TOP__top_tb__DOT__T1__DOT__ADD2.__Vconfigure(false);
+    // Setup scopes
+    __Vscope_top_tb.configure(this, name(), "top_tb", "top_tb", -12, VerilatedScope::SCOPE_OTHER);
 }
