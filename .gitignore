@@ -15,4 +15,5 @@ pc_values_hex
 dumpsim
 transcript
 .DS_Store
-risc-v_verilator
+risc-v_verilator/
+mips/
