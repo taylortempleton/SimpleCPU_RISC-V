@@ -124,28 +124,14 @@ void gen_r_instr (int vopt, ...) {
     }
     else {
         opcode      = (funct_val_r_type[instr_idx]) & 0x3F;
-        printf("*** Debug *** hex_gen.c>>gen_r_instr: opcode: %x \n",opcode);
-        printf("*** Debug *** hex_gen.c>>gen_r_instr: (funct_val_r_type[instr_idx]): %x \n",(funct_val_r_type[instr_idx]));
         funct3      = (funct_val_r_type [instr_idx] & 0x7000) >> 12;
-        printf("*** Debug *** hex_gen.c>>gen_r_instr: funct3: %x \n",funct3);
-        funct7      = (((funct_val_r_type [instr_idx]) & 0xFE000000) >> 25);
-        printf("*** Debug *** hex_gen.c>>gen_r_instr: funct7: %x \n",funct7);       
+        funct7      = (((funct_val_r_type [instr_idx]) & 0xFE000000) >> 25);      
         rs1         = rand ()%32;
-        printf("*** Debug *** hex_gen.c>>gen_r_instr: rs1: %x \n",rs1); 
         rs2         = rand ()%32;
-        printf("*** Debug *** hex_gen.c>>gen_r_instr: rs2: %x \n",rs2); 
         rd          = rand ()%32;
-        printf("*** Debug *** hex_gen.c>>gen_r_instr: rd: %x \n",rd); 
     }
-    printf("*** Debug *** hex_gen.c>>gen_r_instr: (funct7 << 25): %x \n",(funct7 << 25));  
-    printf("*** Debug *** hex_gen.c>>gen_r_instr: (rs2 << 25): %x \n",(rs2 << 20));
-    printf("*** Debug *** hex_gen.c>>gen_r_instr: (rs1 << 15): %x \n",(rs1 << 15)); 
-    printf("*** Debug *** hex_gen.c>>gen_r_instr: (funct3 << 12): %x \n",(funct3 << 12)); 
-    printf("*** Debug *** hex_gen.c>>gen_r_instr: (rd << 7): %x \n",(rd << 7));
-    printf("*** Debug *** hex_gen.c>>gen_r_instr: opcode: %x \n",opcode);  
 
     hex_instr = (funct7 << 25) + (rs2 << 20) + (rs1 << 15) + (funct3 << 12) + (rd << 7) + opcode; // Original
-    printf("*** Debug *** hex_gen.c>>gen_r_instr: hex_instr: %x \n",hex_instr);
 
     printf ("[%d] R Type instr generated - 0x%.7x\t\n", instr_gen, hex_instr);
     load_instr_opcode ((uint32_t) hex_instr);
@@ -755,19 +741,9 @@ void gen_instr_hex (int num_r, int num_i, int num_s, int num_b, int num_u, int n
 }
 
 void print_to_file (FILE* pc_hex_val, FILE* instr_hex_val) {
-    printf("*** DEBUG inside print_to_file \n");
     int i = 0;
     for (i = 0; i < (IMEM_SIZE); i=i+4) {
-        //printf("*** DEBUG inside print_to_file>for loop: i: %d \n", i);
         if (PC[i]) {
-            printf("*** DEBUG inside print_to_file>for loop>if: i: %x \n", i);
-            printf("*** DEBUG inside print_to_file>for loop>if: PC: %p \n", PC);
-            printf("*** DEBUG inside print_to_file>for loop>if: PC[i]: %x \n", PC[i]);
-            printf("*** DEBUG inside print_to_file>for loop>if: IMEM_SIZE: %x \n", IMEM_SIZE);
-            printf("*** DEBUG inside print_to_file>for loop: MEM_TEXT_START: %x \n", MEM_TEXT_START);
-            printf("*** DEBUG inside print_to_file>for loop: i+MEM_TEXT_START: %x \n", (i+MEM_TEXT_START));
-            printf("*** DEBUG inside print_to_file>for loop: instr: %p \n", (instr));
-            printf("*** DEBUG inside print_to_file>for loop: instr[i]: %x \n", (instr[i]));
             fprintf(pc_hex_val, "%x\n", i+MEM_TEXT_START);
             fprintf(instr_hex_val, "%x\n", instr[i]);
         }

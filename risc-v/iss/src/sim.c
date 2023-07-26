@@ -57,9 +57,7 @@ int shift_const (unsigned int shamt) {
 void execute_r (uint32_t rs1, uint32_t rs2, uint32_t rd, unsigned int funct7, unsigned int funct3, int opcodefunct_mask) {
     int sign;
     int shift_val;
-    unsigned int funct = ((funct7>>5 & 0x1) << 3) | funct3;
-    printf("*** Debug *** sim.c >> execute_r: funct: %x \n",funct); 
-    printf("*** Debug *** sim.c >> execute_r: opcodefunct_mask: %x \n",opcodefunct_mask); 
+    //unsigned int funct = ((funct7>>5 & 0x1) << 3) | funct3;
     if ((rd == 0)) {
         NEXT_STATE.PC = CURRENT_STATE.PC + 4;
         return;
@@ -336,7 +334,7 @@ void execute_i (unsigned int funct3, int opcode, uint32_t rs1, uint32_t rd, int 
             if (rd) {
                 NEXT_STATE.REGS[rd] = CURRENT_STATE.PC + 4; // Linking
             }
-            printf ("[%d] PC:%.8x\tINSTR:%.8x\t JALR %-2d\n",
+            printf ("[%d] PC:%.8x\tINSTR:%.8x\t JALR 0x%-2d\n",
                 instr_count,
                 CURRENT_STATE.PC,
                 instr_opcode,
