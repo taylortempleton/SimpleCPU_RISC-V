@@ -58,12 +58,14 @@ void execute_r (uint32_t rs1, uint32_t rs2, uint32_t rd, unsigned int funct7, un
     int sign;
     int shift_val;
     unsigned int funct = ((funct7>>5 & 0x1) << 3) | funct3;
+    printf("*** Debug *** sim.c >> execute_r: funct: %x \n",funct); 
+    printf("*** Debug *** sim.c >> execute_r: opcodefunct_mask: %x \n",opcodefunct_mask); 
     if ((rd == 0)) {
         NEXT_STATE.PC = CURRENT_STATE.PC + 4;
         return;
     }
     switch (opcodefunct_mask) {
-        case (SLL): //SLL
+        case (MATCH_SLL): //SLL
             NEXT_STATE.REGS[rd] = CURRENT_STATE.REGS[rs1] << (CURRENT_STATE.REGS[rs2] & 0x1F);
             NEXT_STATE.PC = CURRENT_STATE.PC + 4;
             printf ("[%d] PC:%.8x\tINSTR:%.8x\t SLL X%-2d, X%-2d, X%-2d\n", 
@@ -75,7 +77,7 @@ void execute_r (uint32_t rs1, uint32_t rs2, uint32_t rd, unsigned int funct7, un
                 rs2
             );
         break;
-        case (SRL): //SRL
+        case (MATCH_SRL): //SRL
             NEXT_STATE.REGS[rd] = CURRENT_STATE.REGS[rs1] >> (CURRENT_STATE.REGS[rs2] & 0x1F);
             NEXT_STATE.PC = CURRENT_STATE.PC + 4;
             printf ("[%d] PC:%.8x\tINSTR:%.8x\t SRL X%-2d, X%-2d, X%-2d\n", 
@@ -87,7 +89,7 @@ void execute_r (uint32_t rs1, uint32_t rs2, uint32_t rd, unsigned int funct7, un
                 rs2
             );
         break;
-        case (SRA): //SRA
+        case (MATCH_SRA): //SRA
             sign = (CURRENT_STATE.REGS[rs1])>>31;
             shift_val = shift_const((CURRENT_STATE.REGS[rs2] & 0x1F));
             NEXT_STATE.REGS[rd] = CURRENT_STATE.REGS[rs1] >> (CURRENT_STATE.REGS[rs2] & 0x1F);
@@ -102,7 +104,7 @@ void execute_r (uint32_t rs1, uint32_t rs2, uint32_t rd, unsigned int funct7, un
                 rs2
             );
         break;
-        case (ADD): //ADD
+        case (MATCH_ADD): //ADD
             NEXT_STATE.REGS[rd] = (int32_t)(CURRENT_STATE.REGS[rs1] + CURRENT_STATE.REGS[rs2]);
             NEXT_STATE.PC = CURRENT_STATE.PC + 4;
             printf ("[%d] PC:%.8x\tINSTR:%.8x\t ADD X%-2d, X%-2d, X%-2d\n", 
@@ -114,7 +116,7 @@ void execute_r (uint32_t rs1, uint32_t rs2, uint32_t rd, unsigned int funct7, un
                 rs2
             );
         break;
-        case (SUB): //SUB
+        case (MATCH_SUB): //SUB
             NEXT_STATE.REGS[rd] = (int32_t)(CURRENT_STATE.REGS[rs1] - CURRENT_STATE.REGS[rs2]);
             NEXT_STATE.PC = CURRENT_STATE.PC + 4;
             printf ("[%d] PC:%.8x\tINSTR:%.8x\t SUB X%-2d, X%-2d, X%-2d\n", 
@@ -126,7 +128,7 @@ void execute_r (uint32_t rs1, uint32_t rs2, uint32_t rd, unsigned int funct7, un
                 rs2
             );
         break;
-        case (AND): //AND
+        case (MATCH_AND): //AND
             NEXT_STATE.REGS[rd] = CURRENT_STATE.REGS[rs1] & CURRENT_STATE.REGS[rs2];
             NEXT_STATE.PC = CURRENT_STATE.PC + 4;
             printf ("[%d] PC:%.8x\tINSTR:%.8x\t AND X%-2d, X%-2d, X%-2d\n", 
@@ -138,7 +140,7 @@ void execute_r (uint32_t rs1, uint32_t rs2, uint32_t rd, unsigned int funct7, un
                 rs2
             );
         break;
-        case (OR): //OR
+        case (MATCH_OR): //OR
             NEXT_STATE.REGS[rd] = CURRENT_STATE.REGS[rs1] | CURRENT_STATE.REGS[rs2];
             NEXT_STATE.PC = CURRENT_STATE.PC + 4;
             printf ("[%d] PC:%.8x\tINSTR:%.8x\t OR X%-2d, X%-2d, X%-2d\n", 
@@ -150,7 +152,7 @@ void execute_r (uint32_t rs1, uint32_t rs2, uint32_t rd, unsigned int funct7, un
                 rs2
             );
         break;
-        case (XOR): //XOR
+        case (MATCH_XOR): //XOR
             NEXT_STATE.REGS[rd] = CURRENT_STATE.REGS[rs1] ^ CURRENT_STATE.REGS[rs2];
             NEXT_STATE.PC = CURRENT_STATE.PC + 4;
             printf ("[%d] PC:%.8x\tINSTR:%.8x\t XOR X%-2d, X%-2d, X%-2d\n", 
@@ -162,7 +164,7 @@ void execute_r (uint32_t rs1, uint32_t rs2, uint32_t rd, unsigned int funct7, un
                 rs2
             );
         break;
-        case (SLT): //SLT
+        case (MATCH_SLT): //SLT
             NEXT_STATE.REGS[rd] = ((signed)CURRENT_STATE.REGS[rs1] < (signed)CURRENT_STATE.REGS[rs2]);
             NEXT_STATE.PC = CURRENT_STATE.PC + 4;
             printf ("[%d] PC:%.8x\tINSTR:%.8x\t SLT X%-2d, X%-2d, X%-2d\n", 
@@ -174,7 +176,7 @@ void execute_r (uint32_t rs1, uint32_t rs2, uint32_t rd, unsigned int funct7, un
                 rs2
             );
         break;
-        case (SLTU): //SLTU
+        case (MATCH_SLTU): //SLTU
             NEXT_STATE.REGS[rd] = (CURRENT_STATE.REGS[rs1] < CURRENT_STATE.REGS[rs2]);
             NEXT_STATE.PC = CURRENT_STATE.PC + 4;
             printf ("[%d] PC:%.8x\tINSTR:%.8x\t SLTU X%-2d, X%-2d, X%-2d\n", 
@@ -461,7 +463,7 @@ void execute_s (unsigned int funct3, uint32_t rs1, uint32_t rs2, int imm, int op
     uint32_t address;
     //printf ("B-type instruction\tOpcode is :0x%x\n", opcode);
     switch (opcodefunct_mask) {
-        case (SB): //SB
+        case (MATCH_SB): //SB
             shift_val = shift_const(12);
             sign = (imm & 0x800)>>11;
             imm = (sign) ? (imm | shift_val) : imm;
@@ -477,7 +479,7 @@ void execute_s (unsigned int funct3, uint32_t rs1, uint32_t rs2, int imm, int op
                 imm
             );
         break;
-        case (SH): //SH
+        case (MATCH_SH): //SH
             shift_val = shift_const(16);
             sign = (imm & 0x8000)>>15;
             imm = (sign) ? (imm | shift_val) : imm;
@@ -493,7 +495,7 @@ void execute_s (unsigned int funct3, uint32_t rs1, uint32_t rs2, int imm, int op
                 imm
             );
         break;
-        case (SW): //SW
+        case (MATCH_SW): //SW
             shift_val = shift_const(16);
             sign = (imm & 0x8000)>>15;
             imm = (sign) ? (imm | shift_val) : imm;
@@ -539,7 +541,7 @@ void execute_b (unsigned int funct3, uint32_t rs1, uint32_t rs2, int imm, int op
     uint32_t address;
     //printf ("B-type instruction\tOpcode is :0x%x\n", opcode);
     switch (opcodefunct_mask) {
-        case (BEQ): //BEQ
+        case (MATCH_BEQ): //BEQ
             if (CURRENT_STATE.REGS[rs1] == CURRENT_STATE.REGS[rs2]) {
                 shift_val = shift_const(19);
                 sign = (imm & 0x1000)>>12;
@@ -558,7 +560,7 @@ void execute_b (unsigned int funct3, uint32_t rs1, uint32_t rs2, int imm, int op
                 imm
             );
         break;
-        case (BNE): //BNE
+        case (MATCH_BNE): //BNE
             if (CURRENT_STATE.REGS[rs1] != CURRENT_STATE.REGS[rs2]) {
                 shift_val = shift_const(19);
                 sign = (imm & 0x1000)>>12;
@@ -577,7 +579,7 @@ void execute_b (unsigned int funct3, uint32_t rs1, uint32_t rs2, int imm, int op
                 imm
             );
         break;
-        case (BLT): //BLT
+        case (MATCH_BLT): //BLT
             if ((signed)CURRENT_STATE.REGS[rs1] < (signed)CURRENT_STATE.REGS[rs2]) {
                 shift_val = shift_const(19);
                 sign = (imm & 0x1000)>>12;
@@ -596,7 +598,7 @@ void execute_b (unsigned int funct3, uint32_t rs1, uint32_t rs2, int imm, int op
                 imm
             );
         break;
-        case (BLTU): //BLTU
+        case (MATCH_BLTU): //BLTU
             if ((unsigned)CURRENT_STATE.REGS[rs1] < (unsigned)CURRENT_STATE.REGS[rs2]) {
                 shift_val = shift_const(19);
                 sign = (imm & 0x1000)>>12;
@@ -615,7 +617,7 @@ void execute_b (unsigned int funct3, uint32_t rs1, uint32_t rs2, int imm, int op
                 imm
             );
         break;
-        case (BGE): //BGE
+        case (MATCH_BGE): //BGE
             if ((signed)CURRENT_STATE.REGS[rs1] >= (signed)CURRENT_STATE.REGS[rs2]) {
                 shift_val = shift_const(19);
                 sign = (imm & 0x1000)>>12;
@@ -634,7 +636,7 @@ void execute_b (unsigned int funct3, uint32_t rs1, uint32_t rs2, int imm, int op
                 imm
             );
         break;
-        case (BGEU): //BGEU
+        case (MATCH_BGEU): //BGEU
             if (CURRENT_STATE.REGS[rs1] >= CURRENT_STATE.REGS[rs2]) {
                 shift_val = shift_const(19);
                 sign = (imm & 0x1000)>>12;

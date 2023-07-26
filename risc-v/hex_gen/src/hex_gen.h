@@ -49,70 +49,85 @@ const int mask_val_r_type[10] = {
     MASK_SLTU
 };
 
-
 const char* funct_str_r_type[10] = {
     "SLL",     "SRL",       "SRA",
     "ADD",     "SUB",       "AND",
     "OR",      "XOR",       "SLT",
     "SLTU"
 };
+
 const int opcode_val_i_type[8] = {
     MATCH_ADDI,       MATCH_SLTI,       MATCH_SLTIU,
     MATCH_ANDI,       MATCH_ORI,        MATCH_XORI,
     MATCH_JALR,       /*LB,         LH,*/
     MATCH_LW         /*LBU,        LHU*/
 };
+
 const int mask_val_i_type[8] = {
     MASK_ADDI,       MASK_SLTI,       MASK_SLTIU,
     MASK_ANDI,       MASK_ORI,        MASK_XORI,
     MASK_JALR,       /*LB,         LH,*/
     MASK_LW         /*LBU,        LHU*/
 };
+
 const char* opcode_str_i_type[8] = {
     "ADDI",       "SLTI",       "SLTIU",
     "ANDI",       "ORI",        "XORI",
     "JALR",      /*"LB",         "LH",*/
     "LW"         /*"LBU",        "LHU"*/
 };
+
 const int opcode_val_s_type[1] = {
     /*SB,         SH,*/         MATCH_SW
 };
+
 const int mask_val_s_type[1] = {
     /*SB,         SH,*/         MASK_SW
 };
+
 const char* opcode_str_s_type[1] = {
     /*"SB",         "SH",*/         "SW"
 };
+
 const int opcode_val_b_type[6] = {
     MATCH_BEQ,        MATCH_BNE,        MATCH_BLT,
     MATCH_BLTU,       MATCH_BGE,         MATCH_BGEU
 };
+
 const int mask_val_b_type[6] = {
     MASK_BEQ,        MASK_BNE,        MASK_BLT,
     MASK_BLTU,       MASK_BGE,         MASK_BGEU
 };
+
 const char* opcode_str_b_type[6] = {
     "BEQ",        "BNE",        "BLT",
     "BLTU",       "BGE",        "BGEU"
 };
+
 const int opcode_val_u_type[2] = {
     MATCH_LUI ,        MATCH_AUIPC
 };
+
 const int mask_val_u_type[2] = {
     MASK_LUI ,        MASK_AUIPC
 };
+
 const char* opcode_str_u_type[2] = {
     "LUI" ,        "AUIPC"
 };
+
 const int opcode_val_j_type[1] = {
     MATCH_JAL
 };
+
 const int mask_val_j_type[1] = {
     MASK_JAL
 };
+
 const char* opcode_str_j_type[1] = {
     "JAL"
 };
+
 /* Currently the RTL only supports */
 /* registers in the following format */
 const char* register_str[] = {	

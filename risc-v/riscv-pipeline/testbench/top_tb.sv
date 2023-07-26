@@ -131,7 +131,6 @@ import "DPI-C" function int  compare_j (int pc, int instr, int rd, int rd_val);
     initial
     begin
         if (!($value$plusargs("test=%s", test_name))) begin
-
             $fatal ("No test name given");
         end
         $display("Name of test to be run: %s \n", test_name);

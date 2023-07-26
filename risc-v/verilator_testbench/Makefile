@@ -36,7 +36,7 @@ sim: .stamp.sim
 	@echo "### Simulating ###"
 	@echo
 	./obj_dir/Vtop_tb \
-	+test=taylortest \
+	+test=test \
 
 
 .PHONY: waves
