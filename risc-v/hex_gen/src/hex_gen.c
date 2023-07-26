@@ -87,7 +87,8 @@ int check_j_addr (int imm, int funct, int rs1) {
 /* 11:7     rd              */
 /* 6:0      opcode          */
 void print_assembled_r_instr (int funct, int rs1, int rs2, int rd) {
-    printf ("%-4s %s, %s, %s\n\n", 
+    printf ("hex_gen: r-type instr #%d assembled: %-4s %s, %s, %s\n\n", 
+            instr_gen,
             funct_str_r_type[funct],
             register_str[rd],
             register_str[rs1],
@@ -133,7 +134,7 @@ void gen_r_instr (int vopt, ...) {
 
     hex_instr = (funct7 << 25) + (rs2 << 20) + (rs1 << 15) + (funct3 << 12) + (rd << 7) + opcode; // Original
 
-    printf ("[%d] R Type instr generated - 0x%.7x\t\n", instr_gen, hex_instr);
+    printf ("hex_gen: r-type instr #%d generated: 0x%-7x\t\n", instr_gen, hex_instr);
     load_instr_opcode ((uint32_t) hex_instr);
     run (1);
     if (instr_gen == 0)
@@ -165,7 +166,8 @@ void print_assembled_i_instr (int funct, int rs1, int rd, int imm) {
     if (sign_ext) {
         imm = (sign) ? (imm | 0xFFFFF000) : (unsigned)imm;
     }
-    printf ("%-4s %s, %s, 0x%x\n\n", 
+    printf ("hex_gen: i-type instr #%d assembled: %-4s %s, %s, 0x%x\n\n", 
+            instr_gen,
             opcode_str_i_type[funct],
             register_str[rd],
             register_str[rs1],
@@ -250,7 +252,7 @@ void gen_i_instr (int vopt, ...) {
     }
     hex_instr = (imm << 20) + (rs1 << 15) + (funct3 << 12) + (rd << 7) + opcode;
 
-    printf ("[%d] I Type instr generated - 0x%-8x\n", instr_gen, hex_instr);
+    printf ("hex_gen: i-type instr #%d generated: 0x%-8x\t\n", instr_gen, hex_instr);
     load_instr_opcode ((uint32_t) hex_instr);
     run (1);
     if (instr_gen == 0)
@@ -274,7 +276,8 @@ void print_assembled_s_instr (int funct, int rs1, int rs2, int imm) {
     if (sign_ext) {
         imm = (sign) ? (imm | 0xFFFFF000) : (unsigned)imm;
     }
-    printf ("%-4s %s, %s, 0x%x\n\n", 
+    printf ("hex_gen: s-type instr #%d assembled: %-4s %s, %s, 0x%x\n\n", 
+            instr_gen,
             opcode_str_s_type[funct],
             register_str[rs1],
             register_str[rs2],
@@ -355,7 +358,7 @@ void gen_s_instr (int vopt, ...) {
     hex_instr = ((imm >> 5) << 25) + (rs2 << 20) + (rs1 << 15) + 
                 (funct3 << 12) + ((imm & 0x1F) << 7) + opcode;
 
-    printf ("[%d] S Type instr generated - 0x%-8x\n", instr_gen, hex_instr);
+    printf ("hex_gen: s-type instr #%d generated: 0x%-8x\t\n", instr_gen, hex_instr);
     load_instr_opcode ((uint32_t) hex_instr);
     run (1);
     if (instr_gen == 0)
@@ -379,7 +382,8 @@ void print_assembled_b_instr (int funct, int rs1, int rs2, int imm) {
     if (sign_ext) {
         imm = (sign) ? (imm | 0xFFFFE000) : (unsigned)imm;
     }
-    printf ("%-4s %s, %s, 0x%x\n\n", 
+    printf ("hex_gen: b-type instr #%d assembled: %-4s %s, %s, 0x%x\n\n", 
+            instr_gen,
             opcode_str_b_type[funct],
             register_str[rs1],
             register_str[rs2],
@@ -450,7 +454,7 @@ void gen_b_instr (int vopt, ...) {
                 (rs1 << 15) + (funct3 << 12) + (((imm >> 1) & 0xF) << 8) +
                 (((imm >> 11) & 0x1) << 7)   + opcode;
 
-    printf ("[%d] B Type instr generated - 0x%-8x\n", instr_gen, hex_instr);
+    printf ("hex_gen: b-type instr #%d generated: 0x%-8x\t\n", instr_gen, hex_instr);
     load_instr_opcode ((uint32_t) hex_instr);
     run (1);
     if (instr_gen == 0)
@@ -504,7 +508,8 @@ int decode_brn_result (rs1, rs2, funct3) {
 /* 11:7     rd              */
 /* 6:0      opcode          */
 void print_assembled_u_instr (int opcode, int rd, int imm) {
-    printf ("%-4s %s, 0x%x\n\n", 
+    printf ("hex_gen: u-type instr #%d assembled: %-4s %s, 0x%x\n\n", 
+            instr_gen,
             opcode_str_u_type[opcode],
             register_str[rd],
             imm
@@ -543,7 +548,7 @@ void gen_u_instr (int vopt, ...) {
     }
 
     hex_instr = (imm << 12) + (rd << 7) + opcode; 
-    printf ("[%d] U Type instr generated - 0x%-8x\n", instr_gen, hex_instr);
+    printf ("hex_gen: u-type instr #%d generated: 0x%-8x\t\n", instr_gen, hex_instr);
     load_instr_opcode ((uint32_t) hex_instr);
     run (1);
     if (instr_gen == 0)
@@ -559,7 +564,8 @@ void gen_u_instr (int vopt, ...) {
 /* 11:7     rd                      */
 /* 6:0      opcode                  */
 void print_assembled_j_instr (int opcode, int rd, int imm) {
-    printf ("%-4s %s, 0x%-8x\n\n", 
+    printf ("hex_gen: j-type instr #%d assembled: %-4s %s, 0x%-8x\n\n", 
+            instr_gen,
             opcode_str_j_type[opcode],
             register_str[rd],
             imm
@@ -605,7 +611,7 @@ void gen_j_instr (int vopt, ...) {
     hex_instr = (((imm >> 20) & 0x1) << 31) + (((imm >> 1) & 0x3FF) << 21) +
                 (((imm >> 11) & 0x1) << 20) + (((imm >> 12) & 0xFF) << 12) +
                 (rd << 7) + opcode;
-    printf ("[%d] J Type instr generated - 0x%.7x\t\n", instr_gen, hex_instr);
+    printf ("hex_gen: j-type instr #%d generated: 0x%.7x\t\n", instr_gen, hex_instr);
     load_instr_opcode ((uint32_t) hex_instr);
     run (1);
     print_assembled_j_instr (instr_idx, rd, imm);

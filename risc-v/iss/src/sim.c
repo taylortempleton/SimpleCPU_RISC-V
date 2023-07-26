@@ -66,7 +66,7 @@ void execute_r (uint32_t rs1, uint32_t rs2, uint32_t rd, unsigned int funct7, un
         case (MATCH_SLL): //SLL
             NEXT_STATE.REGS[rd] = CURRENT_STATE.REGS[rs1] << (CURRENT_STATE.REGS[rs2] & 0x1F);
             NEXT_STATE.PC = CURRENT_STATE.PC + 4;
-            printf ("[%d] PC:%.8x\tINSTR:%.8x\t SLL X%-2d, X%-2d, X%-2d\n", 
+            printf ("iss: r-type instr #%d simulated:  PC:%.8x\tINSTR:%.8x\t SLL X%-2d, X%-2d, X%-2d\n", 
                 instr_count,
                 CURRENT_STATE.PC,
                 instr_opcode,
@@ -78,7 +78,7 @@ void execute_r (uint32_t rs1, uint32_t rs2, uint32_t rd, unsigned int funct7, un
         case (MATCH_SRL): //SRL
             NEXT_STATE.REGS[rd] = CURRENT_STATE.REGS[rs1] >> (CURRENT_STATE.REGS[rs2] & 0x1F);
             NEXT_STATE.PC = CURRENT_STATE.PC + 4;
-            printf ("[%d] PC:%.8x\tINSTR:%.8x\t SRL X%-2d, X%-2d, X%-2d\n", 
+            printf ("iss: r-type instr #%d simulated: PC:%.8x\tINSTR:%.8x\t SRL X%-2d, X%-2d, X%-2d\n", 
                 instr_count,
                 CURRENT_STATE.PC,
                 instr_opcode,
@@ -93,7 +93,7 @@ void execute_r (uint32_t rs1, uint32_t rs2, uint32_t rd, unsigned int funct7, un
             NEXT_STATE.REGS[rd] = CURRENT_STATE.REGS[rs1] >> (CURRENT_STATE.REGS[rs2] & 0x1F);
             NEXT_STATE.REGS[rd] = (sign == 1) ? NEXT_STATE.REGS[rd] | shift_val: NEXT_STATE.REGS[rd]; 
             NEXT_STATE.PC = CURRENT_STATE.PC + 4;
-            printf ("[%d] PC:%.8x\tINSTR:%.8x\t SRA X%-2d, X%-2d, X%-2d\n", 
+            printf ("iss: r-type instr #%d simulated: PC:%.8x\tINSTR:%.8x\t SRA X%-2d, X%-2d, X%-2d\n", 
                 instr_count,
                 CURRENT_STATE.PC,
                 instr_opcode,
@@ -105,7 +105,7 @@ void execute_r (uint32_t rs1, uint32_t rs2, uint32_t rd, unsigned int funct7, un
         case (MATCH_ADD): //ADD
             NEXT_STATE.REGS[rd] = (int32_t)(CURRENT_STATE.REGS[rs1] + CURRENT_STATE.REGS[rs2]);
             NEXT_STATE.PC = CURRENT_STATE.PC + 4;
-            printf ("[%d] PC:%.8x\tINSTR:%.8x\t ADD X%-2d, X%-2d, X%-2d\n", 
+            printf ("iss: r-type instr #%d simulated: PC:%.8x\tINSTR:%.8x\t ADD X%-2d, X%-2d, X%-2d\n", 
                 instr_count,
                 CURRENT_STATE.PC,
                 instr_opcode,
@@ -117,7 +117,7 @@ void execute_r (uint32_t rs1, uint32_t rs2, uint32_t rd, unsigned int funct7, un
         case (MATCH_SUB): //SUB
             NEXT_STATE.REGS[rd] = (int32_t)(CURRENT_STATE.REGS[rs1] - CURRENT_STATE.REGS[rs2]);
             NEXT_STATE.PC = CURRENT_STATE.PC + 4;
-            printf ("[%d] PC:%.8x\tINSTR:%.8x\t SUB X%-2d, X%-2d, X%-2d\n", 
+            printf ("iss: r-type instr #%d simulated: PC:%.8x\tINSTR:%.8x\t SUB X%-2d, X%-2d, X%-2d\n", 
                 instr_count,
                 CURRENT_STATE.PC,
                 instr_opcode,
@@ -129,7 +129,7 @@ void execute_r (uint32_t rs1, uint32_t rs2, uint32_t rd, unsigned int funct7, un
         case (MATCH_AND): //AND
             NEXT_STATE.REGS[rd] = CURRENT_STATE.REGS[rs1] & CURRENT_STATE.REGS[rs2];
             NEXT_STATE.PC = CURRENT_STATE.PC + 4;
-            printf ("[%d] PC:%.8x\tINSTR:%.8x\t AND X%-2d, X%-2d, X%-2d\n", 
+            printf ("iss: r-type instr #%d simulated: PC:%.8x\tINSTR:%.8x\t AND X%-2d, X%-2d, X%-2d\n", 
                 instr_count,
                 CURRENT_STATE.PC,
                 instr_opcode,
@@ -141,7 +141,7 @@ void execute_r (uint32_t rs1, uint32_t rs2, uint32_t rd, unsigned int funct7, un
         case (MATCH_OR): //OR
             NEXT_STATE.REGS[rd] = CURRENT_STATE.REGS[rs1] | CURRENT_STATE.REGS[rs2];
             NEXT_STATE.PC = CURRENT_STATE.PC + 4;
-            printf ("[%d] PC:%.8x\tINSTR:%.8x\t OR X%-2d, X%-2d, X%-2d\n", 
+            printf ("iss: r-type instr #%d simulated: PC:%.8x\tINSTR:%.8x\t OR X%-2d, X%-2d, X%-2d\n", 
                 instr_count,
                 CURRENT_STATE.PC,
                 instr_opcode,
@@ -153,7 +153,7 @@ void execute_r (uint32_t rs1, uint32_t rs2, uint32_t rd, unsigned int funct7, un
         case (MATCH_XOR): //XOR
             NEXT_STATE.REGS[rd] = CURRENT_STATE.REGS[rs1] ^ CURRENT_STATE.REGS[rs2];
             NEXT_STATE.PC = CURRENT_STATE.PC + 4;
-            printf ("[%d] PC:%.8x\tINSTR:%.8x\t XOR X%-2d, X%-2d, X%-2d\n", 
+            printf ("iss: r-type instr #%d simulated: PC:%.8x\tINSTR:%.8x\t XOR X%-2d, X%-2d, X%-2d\n", 
                 instr_count,
                 CURRENT_STATE.PC,
                 instr_opcode,
@@ -165,7 +165,7 @@ void execute_r (uint32_t rs1, uint32_t rs2, uint32_t rd, unsigned int funct7, un
         case (MATCH_SLT): //SLT
             NEXT_STATE.REGS[rd] = ((signed)CURRENT_STATE.REGS[rs1] < (signed)CURRENT_STATE.REGS[rs2]);
             NEXT_STATE.PC = CURRENT_STATE.PC + 4;
-            printf ("[%d] PC:%.8x\tINSTR:%.8x\t SLT X%-2d, X%-2d, X%-2d\n", 
+            printf ("iss: r-type instr #%d simulated: PC:%.8x\tINSTR:%.8x\t SLT X%-2d, X%-2d, X%-2d\n", 
                 instr_count,
                 CURRENT_STATE.PC,
                 instr_opcode,
@@ -177,7 +177,7 @@ void execute_r (uint32_t rs1, uint32_t rs2, uint32_t rd, unsigned int funct7, un
         case (MATCH_SLTU): //SLTU
             NEXT_STATE.REGS[rd] = (CURRENT_STATE.REGS[rs1] < CURRENT_STATE.REGS[rs2]);
             NEXT_STATE.PC = CURRENT_STATE.PC + 4;
-            printf ("[%d] PC:%.8x\tINSTR:%.8x\t SLTU X%-2d, X%-2d, X%-2d\n", 
+            printf ("iss: r-type instr #%d simulated: PC:%.8x\tINSTR:%.8x\t SLTU X%-2d, X%-2d, X%-2d\n", 
                 instr_count,
                 CURRENT_STATE.PC,
                 instr_opcode,
@@ -233,7 +233,7 @@ void execute_i (unsigned int funct3, int opcode, uint32_t rs1, uint32_t rd, int 
     imm = (sign) ? (imm | shift_val) : imm;
     switch (opcodefunct_mask) {
         case (MATCH_ADDI): //ADDI
-            printf ("[%d] PC:%.8x\tINSTR:%.8x\t ADDI X%-2d, X%-2d, 0x%-32x\n", 
+            printf ("iss: i-type instr #%d simulated: PC:%.8x\tINSTR:%.8x\t ADDI X%-2d, X%-2d, 0x%-32x\n", 
                 instr_count,
                 CURRENT_STATE.PC,
                 instr_opcode,
@@ -250,7 +250,7 @@ void execute_i (unsigned int funct3, int opcode, uint32_t rs1, uint32_t rd, int 
             
         break;
         case (MATCH_SLTI): //SLTI
-            printf ("[%d] PC:%.8x\tINSTR:%.8x\t SLTI X%-2d, X%-2d, 0x%-32x\n", 
+            printf ("iss: i-type instr #%d simulated: PC:%.8x\tINSTR:%.8x\t SLTI X%-2d, X%-2d, 0x%-32x\n", 
                 instr_count,
                 CURRENT_STATE.PC,
                 instr_opcode,
@@ -266,7 +266,7 @@ void execute_i (unsigned int funct3, int opcode, uint32_t rs1, uint32_t rd, int 
             NEXT_STATE.PC = CURRENT_STATE.PC + 4;
         break;
         case (MATCH_SLTIU): //SLTIU
-            printf ("[%d] PC:%.8x\tINSTR:%.8x\t SLTIU X%-2d, X%-2d, 0x%-32x\n", 
+            printf ("iss: i-type instr #%d simulated: PC:%.8x\tINSTR:%.8x\t SLTIU X%-2d, X%-2d, 0x%-32x\n", 
                 instr_count,
                 CURRENT_STATE.PC,
                 instr_opcode,
@@ -282,7 +282,7 @@ void execute_i (unsigned int funct3, int opcode, uint32_t rs1, uint32_t rd, int 
             NEXT_STATE.PC = CURRENT_STATE.PC + 4;
         break;
         case (MATCH_ANDI): //ANDI
-            printf ("[%d] PC:%.8x\tINSTR:%.8x\t ANDI X%-2d, X%-2d, 0x%-32x\n", 
+            printf ("iss: i-type instr #%d simulated: PC:%.8x\tINSTR:%.8x\t ANDI X%-2d, X%-2d, 0x%-32x\n", 
                 instr_count,
                 CURRENT_STATE.PC,
                 instr_opcode,
@@ -298,7 +298,7 @@ void execute_i (unsigned int funct3, int opcode, uint32_t rs1, uint32_t rd, int 
             NEXT_STATE.PC = CURRENT_STATE.PC + 4;
         break;
         case (MATCH_ORI): //ORI
-            printf ("[%d] PC:%.8x\tINSTR:%.8x\t ORI X%-2d, X%-2d, 0x%-32x\n", 
+            printf ("iss: i-type instr #%d simulated: PC:%.8x\tINSTR:%.8x\t ORI X%-2d, X%-2d, 0x%-32x\n", 
                 instr_count,
                 CURRENT_STATE.PC,
                 instr_opcode,
@@ -314,7 +314,7 @@ void execute_i (unsigned int funct3, int opcode, uint32_t rs1, uint32_t rd, int 
             NEXT_STATE.PC = CURRENT_STATE.PC + 4;
         break;
         case (MATCH_XORI): //XORI
-            printf ("[%d] PC:%.8x\tINSTR:%.8x\t XORI X%-2d, X%-2d, 0x%-32x\n", 
+            printf ("iss: i-type instr #%d simulated: PC:%.8x\tINSTR:%.8x\t XORI X%-2d, X%-2d, 0x%-32x\n", 
                 instr_count,
                 CURRENT_STATE.PC,
                 instr_opcode,
@@ -334,7 +334,7 @@ void execute_i (unsigned int funct3, int opcode, uint32_t rs1, uint32_t rd, int 
             if (rd) {
                 NEXT_STATE.REGS[rd] = CURRENT_STATE.PC + 4; // Linking
             }
-            printf ("[%d] PC:%.8x\tINSTR:%.8x\t JALR 0x%-2d\n",
+            printf ("iss: i-type instr #%d simulated: PC:%.8x\tINSTR:%.8x\t JALR 0x%-2d\n",
                 instr_count,
                 CURRENT_STATE.PC,
                 instr_opcode,
@@ -346,7 +346,7 @@ void execute_i (unsigned int funct3, int opcode, uint32_t rs1, uint32_t rd, int 
             mem_content = mem_read_32((uint32_t)address) & 0xFF;
             shift_val = shift_const(24);
             sign = (mem_content >> 7);
-            printf ("[%d] PC:%.8x\tINSTR:%.8x\t LB X%-2d, X%-2d, 0x%-32x\n", 
+            printf ("iss: i-type instr #%d simulated: PC:%.8x\tINSTR:%.8x\t LB X%-2d, X%-2d, 0x%-32x\n", 
                 instr_count,
                 CURRENT_STATE.PC,
                 instr_opcode,
@@ -365,7 +365,7 @@ void execute_i (unsigned int funct3, int opcode, uint32_t rs1, uint32_t rd, int 
             address = CURRENT_STATE.REGS[rs1] + imm;
             mem_content = mem_read_32((uint32_t)address) & 0xFFFF;
             sign = (mem_content >> 15);
-            printf ("[%d] PC:%.8x\tINSTR:%.8x\t LH X%-2d, X%-2d, 0x%-32x\n", 
+            printf ("iss: i-type instr #%d simulated: PC:%.8x\tINSTR:%.8x\t LH X%-2d, X%-2d, 0x%-32x\n", 
                 instr_count,
                 CURRENT_STATE.PC,
                 instr_opcode,
@@ -383,7 +383,7 @@ void execute_i (unsigned int funct3, int opcode, uint32_t rs1, uint32_t rd, int 
         case (MATCH_LW): //LW
             address = CURRENT_STATE.REGS[rs1] + imm;
             mem_content = mem_read_32((uint32_t)address) ;
-            printf ("[%d] PC:%.8x\tINSTR:%.8x\t LW X%-2d, X%-2d, 0x%-32x\n", 
+            printf ("iss: i-type instr #%d simulated: PC:%.8x\tINSTR:%.8x\t LW X%-2d, X%-2d, 0x%-32x\n", 
                 instr_count,
                 CURRENT_STATE.PC,
                 instr_opcode,
@@ -401,7 +401,7 @@ void execute_i (unsigned int funct3, int opcode, uint32_t rs1, uint32_t rd, int 
         case (MATCH_LBU): //LBU
             address = CURRENT_STATE.REGS[rs1] + imm;
             mem_content = mem_read_32((uint32_t)address) & 0xFF;
-            printf ("[%d] PC:%.8x\tINSTR:%.8x\t LBU X%-2d, X%-2d, 0x%-32x\n", 
+            printf ("iss: i-type instr #%d simulated: PC:%.8x\tINSTR:%.8x\t LBU X%-2d, X%-2d, 0x%-32x\n", 
                 instr_count,
                 CURRENT_STATE.PC,
                 instr_opcode,
@@ -419,7 +419,7 @@ void execute_i (unsigned int funct3, int opcode, uint32_t rs1, uint32_t rd, int 
         case (MATCH_LHU): //LHU
             address = CURRENT_STATE.REGS[rs1] + imm;
             mem_content = mem_read_32((uint32_t)address) & 0xFFFF;
-            printf ("[%d] PC:%.8x\tINSTR:%.8x\t LHU X%-2d, X%-2d, 0x%-32x\n", 
+            printf ("iss: i-type instr #%d simulated: PC:%.8x\tINSTR:%.8x\t LHU X%-2d, X%-2d, 0x%-32x\n", 
                 instr_count,
                 CURRENT_STATE.PC,
                 instr_opcode,
@@ -468,7 +468,7 @@ void execute_s (unsigned int funct3, uint32_t rs1, uint32_t rs2, int imm, int op
             address = CURRENT_STATE.REGS[rs2] + imm;
             mem_write_32(address, CURRENT_STATE.REGS[rs1]&0xFF);
             NEXT_STATE.PC = CURRENT_STATE.PC + 4;
-            printf ("[%d] PC:%.8x\tINSTR:%.8x\t SB X%-2d, X%-2d, 0x%-32x\n", 
+            printf ("iss: s-type instr #%d simulated: PC:%.8x\tINSTR:%.8x\t SB X%-2d, X%-2d, 0x%-32x\n", 
                 instr_count,
                 CURRENT_STATE.PC,
                 instr_opcode,
@@ -484,7 +484,7 @@ void execute_s (unsigned int funct3, uint32_t rs1, uint32_t rs2, int imm, int op
             address = CURRENT_STATE.REGS[rs2] + imm;
             mem_write_32(address, CURRENT_STATE.REGS[rs1]&0xFFFF);
             NEXT_STATE.PC = CURRENT_STATE.PC + 4;
-            printf ("[%d] PC:%.8x\tINSTR:%.8x\t SH X%-2d, X%-2d, 0x%-32x\n", 
+            printf ("iss: s-type instr #%d simulated: PC:%.8x\tINSTR:%.8x\t SH X%-2d, X%-2d, 0x%-32x\n", 
                 instr_count,
                 CURRENT_STATE.PC,
                 instr_opcode,
@@ -502,7 +502,7 @@ void execute_s (unsigned int funct3, uint32_t rs1, uint32_t rs2, int imm, int op
             mem_write_32(address, CURRENT_STATE.REGS[rs1]);
             //printf ("Writing to: 0x%-8x", address);
             NEXT_STATE.PC = CURRENT_STATE.PC + 4;
-            printf ("[%d] PC:%.8x\tINSTR:%.8x\t SW X%-2d, X%-2d, 0x%-32x\n", 
+            printf ("iss: s-type instr #%d simulated: PC:%.8x\tINSTR:%.8x\t SW X%-2d, X%-2d, 0x%-32x\n", 
                 instr_count,
                 CURRENT_STATE.PC,
                 instr_opcode,
@@ -549,7 +549,7 @@ void execute_b (unsigned int funct3, uint32_t rs1, uint32_t rs2, int imm, int op
             else {
                 NEXT_STATE.PC = CURRENT_STATE.PC + 4;
             }
-            printf ("[%d] PC:%.8x\tINSTR:%.8x\t BEQ X%-2d, X%-2d, 0x%-32x\n", 
+            printf ("iss: b-type instr #%d simulated: PC:%.8x\tINSTR:%.8x\t BEQ X%-2d, X%-2d, 0x%-32x\n", 
                 instr_count,
                 CURRENT_STATE.PC,
                 instr_opcode,
@@ -568,7 +568,7 @@ void execute_b (unsigned int funct3, uint32_t rs1, uint32_t rs2, int imm, int op
             else {
                 NEXT_STATE.PC = CURRENT_STATE.PC + 4;
             }
-            printf ("[%d] PC:%.8x\tINSTR:%.8x\t BNE X%-2d, X%-2d, 0x%-32x\n", 
+            printf ("iss: b-type instr #%d simulated: PC:%.8x\tINSTR:%.8x\t BNE X%-2d, X%-2d, 0x%-32x\n", 
                 instr_count,
                 CURRENT_STATE.PC,
                 instr_opcode,
@@ -587,7 +587,7 @@ void execute_b (unsigned int funct3, uint32_t rs1, uint32_t rs2, int imm, int op
             else {
                 NEXT_STATE.PC = CURRENT_STATE.PC + 4;
             }
-            printf ("[%d] PC:%.8x\tINSTR:%.8x\t BLT X%-2d, X%-2d, 0x%-32x\n", 
+            printf ("iss: b-type instr #%d simulated: PC:%.8x\tINSTR:%.8x\t BLT X%-2d, X%-2d, 0x%-32x\n", 
                 instr_count,
                 CURRENT_STATE.PC,
                 instr_opcode,
@@ -606,7 +606,7 @@ void execute_b (unsigned int funct3, uint32_t rs1, uint32_t rs2, int imm, int op
             else {
                 NEXT_STATE.PC = CURRENT_STATE.PC + 4;
             }
-            printf ("[%d] PC:%.8x\tINSTR:%.8x\t BLTU X%-2d, X%-2d, 0x%-32x\n", 
+            printf ("iss: b-type instr #%d simulated: PC:%.8x\tINSTR:%.8x\t BLTU X%-2d, X%-2d, 0x%-32x\n", 
                 instr_count,
                 CURRENT_STATE.PC,
                 instr_opcode,
@@ -625,7 +625,7 @@ void execute_b (unsigned int funct3, uint32_t rs1, uint32_t rs2, int imm, int op
             else {
                 NEXT_STATE.PC = CURRENT_STATE.PC + 4;
             }
-            printf ("[%d] PC:%.8x\tINSTR:%.8x\t BGE X%-2d, X%-2d, 0x%-32x\n", 
+            printf ("iss: b-type instr #%d simulated: PC:%.8x\tINSTR:%.8x\t BGE X%-2d, X%-2d, 0x%-32x\n", 
                 instr_count,
                 CURRENT_STATE.PC,
                 instr_opcode,
@@ -644,7 +644,7 @@ void execute_b (unsigned int funct3, uint32_t rs1, uint32_t rs2, int imm, int op
             else {
                 NEXT_STATE.PC = CURRENT_STATE.PC + 4;
             }
-            printf ("[%d] PC:%.8x\tINSTR:%.8x\t BGEU X%-2d, X%-2d, 0x%-32x\n", 
+            printf ("iss: b-type instr #%d simulated: PC:%.8x\tINSTR:%.8x\t BGEU X%-2d, X%-2d, 0x%-32x\n", 
                 instr_count,
                 CURRENT_STATE.PC,
                 instr_opcode,
@@ -684,7 +684,7 @@ void execute_u (int opcode, uint32_t rd, int imm, int opcodefunct_mask) {
             u_val = imm << 12;
             NEXT_STATE.REGS[rd] = rd ? u_val : 0;
             NEXT_STATE.PC = CURRENT_STATE.PC + 4;
-            printf ("[%d] PC:%.8x\tINSTR:%.8x\t LUI X%-2d, 0x%-32x\n", 
+            printf ("iss: u-type instr #%d simulated: PC:%.8x\tINSTR:%.8x\t LUI X%-2d, 0x%-32x\n", 
                 instr_count,
                 CURRENT_STATE.PC,
                 instr_opcode,
@@ -696,7 +696,7 @@ void execute_u (int opcode, uint32_t rd, int imm, int opcodefunct_mask) {
             u_val = imm << 12;
             NEXT_STATE.REGS[rd] = rd ? CURRENT_STATE.PC + u_val : 0;
             NEXT_STATE.PC = CURRENT_STATE.PC + 4;
-            printf ("[%d] PC:%.8x\tINSTR:%.8x\t AUIPC X%-2d, 0x%-32x\n", 
+            printf ("iss: u-type instr #%d simulated: PC:%.8x\tINSTR:%.8x\t AUIPC X%-2d, 0x%-32x\n", 
                 instr_count,
                 CURRENT_STATE.PC,
                 instr_opcode,
@@ -736,7 +736,8 @@ void execute_j (uint32_t rd, int imm, int opcodefunct_mask) {
     if (rd) {
       NEXT_STATE.REGS[rd] = CURRENT_STATE.PC + 4;
     }
-    printf ("[%d] PC:%.8x\tINSTR:%.8x\t JAL X%-2d, 0x%-8x\n", 
+    printf ("iss: j-type instr #%d simulated: PC:%.8x\tINSTR:%.8x\t JAL X%-2d, 0x%-8x\n", 
+     
         instr_count,
         CURRENT_STATE.PC,
         instr_opcode,
