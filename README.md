@@ -21,7 +21,12 @@ Instructions to run a randomly generated risc-v instruction sequence on the simp
 	  * $ make
 	* Run hex_gen executable within input to specify how many instructions you want. To generate 2 i-type instructions, 3 j-type instructions and 5 r-type instructions run:
 	  * $ ./hex_gen -i 2 -j 3 -r 5
-	* Copy the 2 output hex files into the verilator_testbench directory: test_instr.hex and test_pc.hex.
+   	* Copy the 2 output hex files into the verilator_testbench directory: test_instr.hex and test_pc.hex.
+
+Example hex_gen output:
+![](https://github.com/taylortempleton/SimpleCPU_RISC-V/blob/master/risc-v/docs/Hex_gen_output.png)
+
+	
 
 4. Run Verilator
 	* cd to the verilator_testbench directory
