@@ -4,9 +4,9 @@
 Taylor's contributions:
 1. Create Verilator/C++ testbench for verification, debug and waveform review (Complete)
 2. Debug and update existing random instruction sequence generator
-  * Correct infinite-loop bug impacting i-type and j-type risc-v instructions. (Complete)
-  * Correct JALR instruction function. (Complete)
-  * Add hex_gen support for remaining unsupported RV32I base instructions (In progress)
+	* Correct infinite-loop bug impacting i-type and j-type risc-v instructions. (Complete)
+	* Correct JALR instruction function. (Complete)
+	* Add hex_gen support for remaining unsupported RV32I base instructions (In progress)
 3. Draft and execute verification plan. (Pending)
 
 -----------------
