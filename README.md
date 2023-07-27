@@ -1,16 +1,19 @@
-***Note: Overwhelming majority of the SimpleCPU project is the work of Tenstorrent engineering genius Rahul Behl.  
+***Note: The below effort builds upon the amazing and substantial work of Tenstorrent engineering genius Rahul Behl.  My goal is simply to contribute to an already great project, to futher my own understanding of risc-v.  Many thanks to Rahul for publishing such a useful educational resource.
 * https://www.linkedin.com/in/raulbehl/
 
-Taylor's contributions, not yet merged:
-* Correct infinite loop bug of i-type and j-type instructions. (Complete)
-* Correct JALR instruction function. (Complete)
-* Create Verilator testbench for verification purposes. (Complete)
-* Add hex_gen support for remaining unsupported RISC-V instructions (In progress)
+Taylor's contributions:
+1. Create Verilator/C++ testbench for verification, debug and waveform review (Complete)
+2. Debug and update existing random instruction sequence generator
+  * Correct infinite-loop bug impacting i-type and j-type risc-v instructions. (Complete)
+  * Correct JALR instruction function. (Complete)
+  * Add hex_gen support for remaining unsupported RV32I base instructions (In progress)
+3. Draft and execute verification plan. (Pending)
+
 -----------------
 
-Instructions to run a randomly generated risc-v instruction sequence on the simple CPU, and view waves forms with the Verilator/C++ testbench, useful for verification:
+Instructions to run a randomly generated risc-v instruction sequence on the simple CPU, and view wavesforms with the Verilator/C++ testbench:
 
-1. Generate libhex.so shared object with iss, for use with hex_gen
+1. Generate libhex.so shared object with instruction set simulator.  (Hex gen passes randomly created instructions through simulator to check validity.)
    	* cd to iss directory
    	* Run make to create libhex.so
    	  * $ make
@@ -20,19 +23,19 @@ Instructions to run a randomly generated risc-v instruction sequence on the simp
 	* Run make to create an executable.
 	  * $ make
 	* Run hex_gen executable within input to specify how many instructions you want. To generate 2 i-type instructions, 3 j-type instructions and 5 r-type instructions run:
-	  * $ ./hex_gen -i 2 -j 3 -r 5
+	  * $ ./hex_gen -i 2 -j 1 -r 1
    	* Copy the 2 output hex files into the verilator_testbench directory: test_instr.hex and test_pc.hex.
 
-Example hex_gen output:
-![](https://github.com/taylortempleton/SimpleCPU_RISC-V/blob/master/risc-v/docs/Hex_gen_output.png)
+Example hex_gen output for $ ./hex_gen -i 2 -j 1 -r 1:
+![](https://github.com/taylortempleton/SimpleCPU_RISC-V/blob/master/risc-v/docs/hex_genOutput.png)
 
 	
 
 4. Run Verilator
 	* cd to the verilator_testbench directory
-	* Run verilate
+	* Run verilate, which converts verilog/systemverilog to cpp files
   	  * $ make verilate
-	* Run build
+	* Run build, which builds an executable.
 	  * $ make build
 	* In Makefile, make sure the +test flag matches the .hex file names.  It will by default, but will need to be updated to match the hex files if a custom name was chosen.  Under .stamp.sim:
 	+test=***UPDATE IF A CUSTOM TEST NAME WAS USED*** \
