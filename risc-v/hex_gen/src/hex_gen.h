@@ -56,37 +56,40 @@ const char* funct_str_r_type[10] = {
     "SLTU"
 };
 
-const int opcode_val_i_type[8] = {
+const int opcode_val_i_type[15] = {
     MATCH_ADDI,       MATCH_SLTI,       MATCH_SLTIU,
     MATCH_ANDI,       MATCH_ORI,        MATCH_XORI,
-    MATCH_JALR,       /*LB,         LH,*/
-    MATCH_LW         /*LBU,        LHU*/
+    MATCH_JALR,       MATCH_LB,         MATCH_LH,
+    MATCH_LW,         MATCH_LBU,        MATCH_LHU,
+    MATCH_SLLI,       MATCH_SRLI,       MATCH_SRAI
 };
 
-const int mask_val_i_type[8] = {
+const int mask_val_i_type[15] = {
     MASK_ADDI,       MASK_SLTI,       MASK_SLTIU,
     MASK_ANDI,       MASK_ORI,        MASK_XORI,
-    MASK_JALR,       /*LB,         LH,*/
-    MASK_LW         /*LBU,        LHU*/
+    MASK_JALR,       MASK_LB,         MASK_LH,
+    MASK_LW,         MASK_LBU,        MASK_LHU,
+    MASK_SLLI,       MASK_SRLI,       MASK_SRAI
 };
 
-const char* opcode_str_i_type[8] = {
+const char* opcode_str_i_type[15] = {
     "ADDI",       "SLTI",       "SLTIU",
     "ANDI",       "ORI",        "XORI",
-    "JALR",      /*"LB",         "LH",*/
-    "LW"         /*"LBU",        "LHU"*/
+    "JALR",       "LB",         "LH",
+    "LW",         "LBU",        "LHU",
+    "SLLI",       "SRLI",       "SRAI"
 };
 
-const int opcode_val_s_type[1] = {
-    /*SB,         SH,*/         MATCH_SW
+const int opcode_val_s_type[3] = {
+    MATCH_SB,         MATCH_SH,         MATCH_SW
 };
 
-const int mask_val_s_type[1] = {
-    /*SB,         SH,*/         MASK_SW
+const int mask_val_s_type[3] = {
+    MASK_SB,         MASK_SH,         MASK_SW
 };
 
-const char* opcode_str_s_type[1] = {
-    /*"SB",         "SH",*/         "SW"
+const char* opcode_str_s_type[3] = {
+    "SB",         "SH",         "SW"
 };
 
 const int opcode_val_b_type[6] = {
