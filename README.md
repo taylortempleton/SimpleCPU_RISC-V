@@ -1,3 +1,14 @@
+# RISC-V CPU Verification Testbench
+
+## Hello!
+
+I am a Raleigh, NC based engineer with RF semiconductor fabrication experience reskilling for a role within a computer-hardware manufacturing or design focused organization.
+
+Below is a small self-assigned project in support of that effort. All input is much appreciated.  Thank you!
+
+Taylor Templeton
+taylor.templeton@gmail.com
+
 ***Note: The below effort builds upon the amazing and substantial work of Tenstorrent engineering genius Rahul Behl.  My goal is simply to contribute to an already great project, to futher my own understanding of risc-v.  Many thanks to Rahul for publishing such a useful educational resource.
 * https://www.linkedin.com/in/raulbehl/
 
